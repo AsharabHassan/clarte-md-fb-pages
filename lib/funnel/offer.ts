@@ -34,7 +34,9 @@ export interface FunnelBundle {
   offerPkr: number;
   tagline: string;
   description: string;
-  hero: string; // public image path
+  hero: string; // public image path or remote URL
+  /** How the hero fits its frame. Lifestyle photos = cover; product shots = contain. */
+  heroFit?: 'cover' | 'contain';
 }
 
 /** The bundles offered in the funnel, in display order (hero first). */
@@ -58,6 +60,16 @@ export const FUNNEL_BUNDLES: FunnelBundle[] = [
     description:
       'The two essentials to start clearing acne — a salicylic 2% wash that decongests pores, plus a niacinamide 10% + azelaic serum that calms active breakouts. The simplest way to begin.',
     hero: '/protocols/acne-essentials-protocol/hero.webp',
+  },
+  {
+    slug: 'acne-solo-protocol',
+    name: 'Acne Serum Solo',
+    itemSkus: ['acne'],
+    offerPkr: 1999,
+    tagline: 'Entry tier · the hero serum',
+    description:
+      'Just the clinical Acne Serum — niacinamide 10% + azelaic acid that calm active breakouts and fade post-acne marks. The most affordable way to start.',
+    hero: '/protocols/acne-solo-protocol/hero.webp',
   },
 ];
 

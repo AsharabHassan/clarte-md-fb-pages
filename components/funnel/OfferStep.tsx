@@ -161,7 +161,7 @@ export function OfferStep({
           return (
             <article key={b.slug} className={`funnel-bundle-card ${selected ? 'is-selected' : ''}`}>
               <div className="funnel-hero-img">
-                <Image src={b.hero} alt={b.name} fill sizes="(max-width: 560px) 100vw, 560px" style={{ objectFit: 'cover' }} />
+                <Image src={b.hero} alt={b.name} fill sizes="(max-width: 560px) 100vw, 560px" style={{ objectFit: b.heroFit ?? 'cover' }} />
                 {selected && <span className="funnel-bundle-badge"><Check className="h-3.5 w-3.5" /> Selected</span>}
               </div>
               <div className="funnel-bundle-top">
