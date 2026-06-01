@@ -7,6 +7,7 @@
 export type FunnelEvent =
   | 'scan_started'
   | 'analysis_complete'
+  | 'lead_captured'
   | 'offer_viewed'
   | 'add_shipping'
   | 'order_placed';

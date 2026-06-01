@@ -12,6 +12,12 @@
 .funnel-cta:disabled { opacity: .7; cursor: default; }
 .funnel-error { color: #c14b36; font-size: 13.5px; margin-top: 10px; }
 
+/* ── Lead-capture gate ───────────────────────────────────────────── */
+.funnel-lead { padding-top: 40px; }
+.funnel-lead-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .14em; color: #2e7d57; background: #eef7f1; border-radius: 999px; padding: 5px 12px; margin-bottom: 16px; }
+.funnel-lead-form { margin-top: 22px; }
+.funnel-lead-privacy { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: #97a0b0; margin: 4px 0 0; }
+
 /* ── Analysis loader overlay ─────────────────────────────────────── */
 .funnel-loader { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px; background: rgba(255,255,255,.94); backdrop-filter: blur(6px); }
 .funnel-loader-card { width: 100%; max-width: 360px; text-align: center; }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ScanStep, type ScanResult } from './ScanStep';
+import { LeadStep } from './LeadStep';
 import { OfferStep } from './OfferStep';
 import type { ReviewCard } from '@/lib/reviews/types';
 import './funnel.css';
@@ -14,7 +15,14 @@ export function ScanFunnel({
   aggregate: { avg: number; count: number };
 }) {
   const [scan, setScan] = useState<ScanResult | null>(null);
-  return scan
-    ? <OfferStep scan={scan} reviews={reviews} aggregate={aggregate} />
-    : <ScanStep onComplete={setScan} reviews={reviews} aggregate={aggregate} />;
+  const [leadDone, setLeadDone] = useState(false);
+
+  // Scan → Lead (gate) → Offer (results).
+  if (!scan) {
+    return <ScanStep onComplete={setScan} reviews={reviews} aggregate={aggregate} />;
+  }
+  if (!leadDone) {
+    return <LeadStep scan={scan} onComplete={() => setLeadDone(true)} />;
+  }
+  return <OfferStep scan={scan} reviews={reviews} aggregate={aggregate} />;
 }

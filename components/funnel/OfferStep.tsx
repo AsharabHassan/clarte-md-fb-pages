@@ -10,6 +10,7 @@ import { PRODUCT_META } from '@/lib/products/catalog';
 import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
 import { BUNDLE_SKUS, ADDON_SKUS, computeCartTotals } from '@/lib/funnel/shop';
 import { trackMetaPurchase } from '@/lib/funnel/meta';
+import { loadLead } from '@/lib/funnel/lead-storage';
 import { Collage } from './Collage';
 import { ProductCard } from './ProductCard';
 import { OrderSummary } from './OrderSummary';
@@ -37,6 +38,7 @@ export function OfferStep({
   const { cart, addBundle, removeItem, clearCart } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [prefill] = useState(() => loadLead()); // name/email/phone from the lead gate
   const savings = computeOfferSavings();
 
   const bundleInCart = cart.items.some((i) => i.type === 'bundle' && i.slug === ACNE_GLOW.slug);
@@ -188,9 +190,9 @@ export function OfferStep({
           className="funnel-form"
           onSubmit={(e) => { e.preventDefault(); placeOrder(e.currentTarget); }}
         >
-          <input name="name" required placeholder="Full name" autoComplete="name" />
-          <input name="phone" required pattern="[0-9+\-\s()]{7,32}" inputMode="tel" placeholder="03XX XXXXXXX" autoComplete="tel" />
-          <input name="email" type="email" required placeholder="Email" autoComplete="email" />
+          <input name="name" required placeholder="Full name" autoComplete="name" defaultValue={prefill?.name ?? ''} />
+          <input name="phone" required pattern="[0-9+\-\s()]{7,32}" inputMode="tel" placeholder="03XX XXXXXXX" autoComplete="tel" defaultValue={prefill?.phone ?? ''} />
+          <input name="email" type="email" required placeholder="Email" autoComplete="email" defaultValue={prefill?.email ?? ''} />
           <input name="address" required minLength={3} placeholder="Street address" autoComplete="street-address" />
           <select name="city" required defaultValue="">
             <option value="" disabled>Select your city</option>
