@@ -490,7 +490,9 @@ export default async function OrderPage({ params, searchParams }: PageParams) {
               Want to add to the protocol later?
             </span>
             <Link
-              href="/products"
+              href="https://clartemd.com.pk/products"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex h-11 items-center gap-2 rounded-lg border border-rule bg-card px-5 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-navy transition-colors hover:border-navy/30"
             >
               Browse the catalogue →

@@ -38,3 +38,85 @@
 .funnel-cod { display: inline-flex; align-items: center; gap: 6px; color: #5b6678; font-size: 13px; margin-bottom: 14px; }
 .funnel-form { display: grid; gap: 10px; }
 .funnel-form input, .funnel-form select { min-height: 48px; border: 1px solid #ece7df; border-radius: 10px; padding: 0 14px; font-size: 15px; background: #fff; }
+
+/* ── Star rating ─────────────────────────────────────────────────── */
+.funnel-stars { display: inline-flex; align-items: center; gap: 8px; }
+.funnel-stars-stack { position: relative; display: inline-block; line-height: 0; }
+.funnel-stars-set { display: inline-flex; }
+.funnel-stars-empty { color: #d8dee9; }
+.funnel-stars-fill { position: absolute; top: 0; left: 0; overflow: hidden; white-space: nowrap; color: #f5a623; }
+.funnel-stars-label { font-size: 13px; font-weight: 600; color: #5b6678; }
+
+/* ── Scan-page trust line (rating + doctor) ──────────────────────── */
+.funnel-trustline { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
+.funnel-doctor { font-size: 12.5px; color: #5b6678; margin: 0; }
+.funnel-doctor--inline { font-weight: 500; letter-spacing: .01em; }
+.funnel-clinical .funnel-doctor { text-align: center; margin-top: 12px; font-style: italic; }
+
+/* ── Clinical proof ──────────────────────────────────────────────── */
+.funnel-clinical { margin: 18px 0 4px; }
+.funnel-clinical-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: #2e5ba8; text-align: center; margin: 0 0 12px; }
+.funnel-clinical-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.funnel-stat { border: 1px solid #ece7df; border-radius: 14px; padding: 12px 8px; text-align: center; background: #fafbfd; }
+.funnel-stat-fig { font-size: 26px; font-weight: 700; color: #0e1f3a; line-height: 1; }
+.funnel-stat-fig span { font-size: 15px; font-weight: 600; }
+.funnel-stat-active { font-size: 12px; font-weight: 600; color: #2e5ba8; margin-top: 4px; }
+.funnel-stat-ctx { font-size: 10.5px; color: #5b6678; line-height: 1.35; margin-top: 4px; }
+.funnel-stat-cite { font-size: 9px; color: #97a0b0; margin-top: 6px; }
+
+/* ── Reviews rail ────────────────────────────────────────────────── */
+.funnel-reviews { margin: 24px 0 4px; }
+.funnel-reviews-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: #2e5ba8; margin: 0 0 12px; }
+.funnel-marquee { overflow: hidden; margin: 0 -18px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.funnel-marquee-track { display: flex; gap: 12px; width: max-content; padding: 4px 18px; animation: funnel-marquee var(--marquee-duration, 40s) linear infinite; }
+.funnel-marquee:hover .funnel-marquee-track { animation-play-state: paused; }
+@keyframes funnel-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.funnel-review-card { flex: 0 0 270px; border: 1px solid #ece7df; border-radius: 16px; padding: 14px 15px; background: #fff; box-shadow: 0 10px 26px -22px rgba(14,31,58,.4); }
+@media (prefers-reduced-motion: reduce) {
+  .funnel-marquee { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .funnel-marquee-track { animation: none; }
+}
+.funnel-review-stars { color: #f5a623; display: flex; gap: 1px; margin-bottom: 8px; }
+.funnel-review-stars .funnel-star-off { color: #d8dee9; }
+.funnel-review-body { font-size: 13.5px; line-height: 1.5; color: #0e1f3a; margin: 0 0 10px; }
+.funnel-review-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.funnel-review-name { font-size: 12px; font-weight: 600; color: #5b6678; }
+.funnel-verified { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 600; color: #2e7d57; background: #e9f5ee; border-radius: 999px; padding: 2px 7px; white-space: nowrap; }
+
+/* ── Protocol hero image ─────────────────────────────────────────── */
+.funnel-hero-img { position: relative; width: 100%; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; margin-bottom: 14px; background: #eef2f8; }
+.funnel-hero-img--scan { margin-top: 18px; box-shadow: 0 18px 40px -26px rgba(14,31,58,.4); }
+
+/* ── Bundle toggle ───────────────────────────────────────────────── */
+.funnel-bundle-toggle { width: 100%; min-height: 44px; border-radius: 12px; border: 1px dashed #c9d3e3; background: #f6f9fd; color: #2e5ba8; font-size: 13.5px; font-weight: 600; cursor: pointer; margin-bottom: 14px; transition: background .2s, border-color .2s; }
+.funnel-bundle-toggle.is-in { border-style: solid; border-color: #cfe3d6; background: #eef7f1; color: #2e7d57; }
+
+/* ── Single-product cards ────────────────────────────────────────── */
+.funnel-products { margin: 4px 0 16px; }
+.funnel-products-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: #97a0b0; margin: 14px 0 8px; }
+.funnel-products-grid { display: grid; gap: 8px; }
+.funnel-product-card { display: flex; align-items: center; gap: 12px; border: 1px solid #ece7df; border-radius: 14px; padding: 10px 12px; background: #fff; transition: border-color .2s; }
+.funnel-product-card.is-added { border-color: #2e5ba8; background: #f6f9fd; }
+.funnel-product-thumb { flex: 0 0 56px; width: 56px; height: 56px; border-radius: 10px; overflow: hidden; background: #f3f5f9; display: grid; place-items: center; }
+.funnel-product-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.funnel-product-info { flex: 1 1 auto; min-width: 0; }
+.funnel-product-name { font-size: 14px; font-weight: 600; color: #0e1f3a; }
+.funnel-product-actives { font-size: 11px; color: #97a0b0; margin-top: 1px; }
+.funnel-product-price { font-size: 13px; font-weight: 600; color: #5b6678; margin-top: 3px; }
+.funnel-product-add { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 4px; height: 36px; padding: 0 14px; border-radius: 999px; border: 1.5px solid #2e5ba8; background: #fff; color: #2e5ba8; font-size: 13px; font-weight: 600; cursor: pointer; }
+.funnel-product-add:active { background: #2e5ba8; color: #fff; }
+.funnel-product-qty { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 10px; height: 36px; padding: 0 8px; border-radius: 999px; background: #2e5ba8; color: #fff; }
+.funnel-product-qty button { display: grid; place-items: center; width: 24px; height: 24px; border: none; background: rgba(255,255,255,.18); color: #fff; border-radius: 999px; cursor: pointer; }
+.funnel-product-qty span { min-width: 14px; text-align: center; font-size: 14px; font-weight: 700; }
+
+/* ── Live order summary ──────────────────────────────────────────── */
+.funnel-summary { border: 1px solid #ece7df; border-radius: 14px; padding: 12px 14px; margin-bottom: 14px; background: #fafbfd; }
+.funnel-summary--empty { color: #97a0b0; font-size: 13px; text-align: center; }
+.funnel-summary-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: #2e5ba8; margin-bottom: 8px; }
+.funnel-summary-line { display: grid; grid-template-columns: 20px 1fr auto; align-items: center; gap: 8px; padding: 4px 0; }
+.funnel-summary-remove { display: grid; place-items: center; width: 20px; height: 20px; border: none; background: #f0eee9; color: #97a0b0; border-radius: 999px; cursor: pointer; }
+.funnel-summary-name { font-size: 13.5px; color: #0e1f3a; }
+.funnel-summary-amt { font-size: 13.5px; font-weight: 600; color: #0e1f3a; }
+.funnel-summary-sub { display: flex; justify-content: space-between; font-size: 12.5px; color: #5b6678; padding: 2px 0; }
+.funnel-summary-sub:first-of-type { margin-top: 8px; border-top: 1px solid #ece7df; padding-top: 8px; }
+.funnel-summary-total { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; color: #0e1f3a; margin-top: 6px; padding-top: 6px; border-top: 1px solid #ece7df; }

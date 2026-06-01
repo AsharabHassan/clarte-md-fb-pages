@@ -1,10 +1,16 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import NextImage from 'next/image';
 import { Camera, Loader2 } from 'lucide-react';
+import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
 import { ACNE_GLOW, FUNNEL_AI_PROMPT } from '@/lib/funnel/offer';
 import { pushFunnelEvent } from '@/lib/funnel/analytics';
 import type { ZoneSource } from '@/lib/funnel/collage';
+import { StarRating } from './StarRating';
+import { Reviews } from './Reviews';
+import { DOCTOR_LINE } from '@/lib/funnel/evidence';
+import type { ReviewCard } from '@/lib/reviews/types';
 
 export interface ScanResult {
   beforeUrl: string;      // object URL of the original photo
@@ -44,7 +50,15 @@ const STAGES = [
   'Rendering your result…',
 ];
 
-export function ScanStep({ onComplete }: { onComplete: (r: ScanResult) => void }) {
+export function ScanStep({
+  onComplete,
+  reviews,
+  aggregate,
+}: {
+  onComplete: (r: ScanResult) => void;
+  reviews: ReviewCard[];
+  aggregate: { avg: number; count: number };
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [stageIdx, setStageIdx] = useState(0);
@@ -149,6 +163,22 @@ export function ScanStep({ onComplete }: { onComplete: (r: ScanResult) => void }
         skin after the 12-week protocol — free, in seconds.
       </p>
 
+      <div className="funnel-trustline">
+        <StarRating avg={aggregate.avg} count={aggregate.count} />
+        <span className="funnel-doctor funnel-doctor--inline">{DOCTOR_LINE}</span>
+      </div>
+
+      <div className="funnel-hero-img funnel-hero-img--scan">
+        <NextImage
+          src={PROTOCOL_HERO}
+          alt="The Acne Glow Protocol"
+          fill
+          sizes="(max-width: 560px) 100vw, 560px"
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+      </div>
+
       <input
         ref={inputRef}
         type="file"
@@ -180,6 +210,8 @@ export function ScanStep({ onComplete }: { onComplete: (r: ScanResult) => void }
       </button>
 
       {err && <p className="funnel-error">{err}</p>}
+
+      <Reviews reviews={reviews} heading="Real results, real customers" />
 
       {busy && (
         <div className="funnel-loader" role="status" aria-live="polite">

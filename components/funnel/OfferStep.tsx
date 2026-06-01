@@ -5,21 +5,45 @@ import { Banknote, Loader2 } from 'lucide-react';
 import { useCart } from '@/lib/cart/use-cart';
 import { ACNE_GLOW, SHIPPING_PKR, FUNNEL_TIMER_KEY, computeOfferSavings } from '@/lib/funnel/offer';
 import { pushFunnelEvent } from '@/lib/funnel/analytics';
+import Image from 'next/image';
 import { PRODUCT_META } from '@/lib/products/catalog';
+import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
+import { BUNDLE_SKUS, ADDON_SKUS } from '@/lib/funnel/shop';
 import { Collage } from './Collage';
+import { ProductCard } from './ProductCard';
+import { OrderSummary } from './OrderSummary';
 import { CountdownTimer } from '@/components/marketing/CountdownTimer';
 import { OrderTicker } from '@/components/marketing/OrderTicker';
 import { LowStockTag } from '@/components/marketing/LowStockTag';
 import { TrustStrip } from '@/components/marketing/TrustStrip';
+import { StarRating } from './StarRating';
+import { ClinicalProof } from './ClinicalProof';
+import { Reviews } from './Reviews';
+import type { ReviewCard } from '@/lib/reviews/types';
 import type { ScanResult } from './ScanStep';
 
 const PK_CITIES = ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan', 'Peshawar', 'Sialkot', 'Gujranwala', 'Hyderabad', 'Quetta', 'Other'];
 
-export function OfferStep({ scan }: { scan: ScanResult }) {
-  const { addBundle, clearCart } = useCart();
+export function OfferStep({
+  scan,
+  reviews,
+  aggregate,
+}: {
+  scan: ScanResult;
+  reviews: ReviewCard[];
+  aggregate: { avg: number; count: number };
+}) {
+  const { cart, addBundle, removeItem, clearCart } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const savings = computeOfferSavings();
+
+  const bundleInCart = cart.items.some((i) => i.type === 'bundle' && i.slug === ACNE_GLOW.slug);
+  function toggleBundle() {
+    const idx = cart.items.findIndex((i) => i.type === 'bundle' && i.slug === ACNE_GLOW.slug);
+    if (idx >= 0) removeItem(idx);
+    else addBundle(ACNE_GLOW.slug);
+  }
 
   useEffect(() => {
     clearCart();
@@ -30,10 +54,19 @@ export function OfferStep({ scan }: { scan: ScanResult }) {
 
   async function placeOrder(form: HTMLFormElement) {
     setErr(null);
+    if (cart.items.length === 0) {
+      setErr('Your cart is empty — add the protocol or a product first.');
+      return;
+    }
     setSubmitting(true);
     pushFunnelEvent('add_shipping');
     const fd = new FormData(form);
     const phone = String(fd.get('phone') ?? '');
+    const items = cart.items.map((i) =>
+      i.type === 'bundle'
+        ? { sku: i.slug, name: ACNE_GLOW.name, qty: 1, price: 0 }
+        : { sku: i.sku, name: PRODUCT_META[i.sku]?.name ?? i.sku, qty: i.qty, price: 0 },
+    );
     try {
       const res = await fetch('/api/create-order', {
         method: 'POST',
@@ -48,9 +81,9 @@ export function OfferStep({ scan }: { scan: ScanResult }) {
             notes: fd.get('notes') || '',
           },
           payment: 'COD',
-          items: [{ sku: ACNE_GLOW.slug, name: ACNE_GLOW.name, qty: 1, price: 0 }],
+          items,
           totals: { subtotal: 0, shipping: 0, total: 0 }, // server recomputes
-          bundle_in_cart: true,
+          bundle_in_cart: cart.items.some((i) => i.type === 'bundle'),
           used_ai_preview: Boolean(scan.afterUrl),
           ts: new Date().toISOString(),
           ...(scan.aiSessionId ? { ai_session_id: scan.aiSessionId } : {}),
@@ -83,7 +116,19 @@ export function OfferStep({ scan }: { scan: ScanResult }) {
         </p>
       )}
 
+      <ClinicalProof />
+
       <div className="funnel-offer-card">
+        <div className="funnel-hero-img">
+          <Image
+            src={PROTOCOL_HERO}
+            alt={ACNE_GLOW.name}
+            fill
+            sizes="(max-width: 560px) 100vw, 560px"
+            style={{ objectFit: 'cover' }}
+            priority
+          />
+        </div>
         <div className="funnel-offer-head">
           <CountdownTimer
             label="Offer reverts in"
@@ -95,6 +140,7 @@ export function OfferStep({ scan }: { scan: ScanResult }) {
         </div>
 
         <h2 className="funnel-h2">{ACNE_GLOW.name}</h2>
+        <StarRating avg={aggregate.avg} count={aggregate.count} size="sm" />
         <ul className="funnel-items">
           {ACNE_GLOW.itemSkus.map((sku) => (
             <li key={sku}>{PRODUCT_META[sku].name}</li>
@@ -107,6 +153,29 @@ export function OfferStep({ scan }: { scan: ScanResult }) {
           <span className="funnel-save">Save {savings.savingsPkr.toLocaleString()} ({savings.savingsPct}%)</span>
         </div>
         <p className="funnel-cod"><Banknote className="h-4 w-4" /> Cash on delivery · + PKR {SHIPPING_PKR} shipping</p>
+
+        <button
+          type="button"
+          className={`funnel-bundle-toggle ${bundleInCart ? 'is-in' : ''}`}
+          onClick={toggleBundle}
+        >
+          {bundleInCart
+            ? '✓ Full protocol in your order — tap to remove'
+            : '+ Add the full protocol (best value)'}
+        </button>
+
+        <div className="funnel-products">
+          <p className="funnel-products-label">In your protocol — buy individually</p>
+          <div className="funnel-products-grid">
+            {BUNDLE_SKUS.map((sku) => <ProductCard key={sku} sku={sku} />)}
+          </div>
+          <p className="funnel-products-label">Popular add-ons</p>
+          <div className="funnel-products-grid">
+            {ADDON_SKUS.map((sku) => <ProductCard key={sku} sku={sku} />)}
+          </div>
+        </div>
+
+        <OrderSummary />
 
         <form
           className="funnel-form"
@@ -129,6 +198,8 @@ export function OfferStep({ scan }: { scan: ScanResult }) {
 
         <TrustStrip variant="chips" tone="light" limit={5} className="mt-4" />
       </div>
+
+      <Reviews reviews={reviews} />
     </section>
   );
 }
