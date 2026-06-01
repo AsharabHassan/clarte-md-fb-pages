@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { CartProvider } from '@/lib/cart/provider';
+import { FB_PIXEL_ID } from '@/lib/funnel/meta';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3001';
 
@@ -14,9 +15,6 @@ export const metadata: Metadata = {
 };
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
-
-// Meta (Facebook) Pixel — public client-side ID, fires PageView on every page.
-const FB_PIXEL_ID = '1506593321048508';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

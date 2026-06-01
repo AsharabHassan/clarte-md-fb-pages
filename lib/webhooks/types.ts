@@ -15,6 +15,17 @@ export type OrderEvent =
 export interface OrderEventPayload {
   event: OrderEvent;
   timestamp: string; // ISO 8601 UTC
+  /**
+   * Meta (Facebook) tracking block. `event_id` matches the browser Pixel
+   * event so Meta CAPI (via LeadConnector) deduplicates browser + server.
+   */
+  meta: {
+    pixel_id: string;
+    event_id: string;
+    event_name: string; // Meta standard event, e.g. 'Purchase'
+    value: number;
+    currency: string;
+  };
   order: {
     id: string;
     order_number: string;

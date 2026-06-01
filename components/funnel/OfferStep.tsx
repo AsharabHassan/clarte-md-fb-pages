@@ -8,7 +8,8 @@ import { pushFunnelEvent } from '@/lib/funnel/analytics';
 import Image from 'next/image';
 import { PRODUCT_META } from '@/lib/products/catalog';
 import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
-import { BUNDLE_SKUS, ADDON_SKUS } from '@/lib/funnel/shop';
+import { BUNDLE_SKUS, ADDON_SKUS, computeCartTotals } from '@/lib/funnel/shop';
+import { trackMetaPurchase } from '@/lib/funnel/meta';
 import { Collage } from './Collage';
 import { ProductCard } from './ProductCard';
 import { OrderSummary } from './OrderSummary';
@@ -67,6 +68,10 @@ export function OfferStep({
         ? { sku: i.slug, name: ACNE_GLOW.name, qty: 1, price: 0 }
         : { sku: i.sku, name: PRODUCT_META[i.sku]?.name ?? i.sku, qty: i.qty, price: 0 },
     );
+    // One event id shared by the browser Pixel Purchase + the order webhook
+    // (→ Meta CAPI via LeadConnector) so Meta deduplicates the two.
+    const metaEventId = crypto.randomUUID();
+    const totalPkr = computeCartTotals(cart).totalPkr;
     try {
       const res = await fetch('/api/create-order', {
         method: 'POST',
@@ -86,6 +91,7 @@ export function OfferStep({
           bundle_in_cart: cart.items.some((i) => i.type === 'bundle'),
           used_ai_preview: Boolean(scan.afterUrl),
           ts: new Date().toISOString(),
+          meta_event_id: metaEventId,
           ...(scan.aiSessionId ? { ai_session_id: scan.aiSessionId } : {}),
         }),
       });
@@ -96,6 +102,7 @@ export function OfferStep({
         return;
       }
       pushFunnelEvent('order_placed', { order_number: data.order_number });
+      trackMetaPurchase(totalPkr, metaEventId); // same eventID as the webhook → dedup
       const last4 = phone.replace(/\D/g, '').slice(-4);
       clearCart();
       window.location.assign(`/order/${data.order_number}?phone=${last4}&placed=1`);

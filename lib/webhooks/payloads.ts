@@ -5,19 +5,31 @@
 
 import type { Order, OrderItem } from '@/lib/db/schema';
 import type { OrderEvent, OrderEventPayload } from './types';
+import { FB_PIXEL_ID, metaEventName } from '@/lib/funnel/meta';
 
 export function buildOrderEventPayload(args: {
   event: OrderEvent;
   order: Order;
   items: OrderItem[];
   previousStatus?: string;
+  /** Pixel eventID from the browser, used for Meta CAPI dedup (order.created). */
+  metaEventId?: string;
 }): OrderEventPayload {
-  const { event, order, items, previousStatus } = args;
+  const { event, order, items, previousStatus, metaEventId } = args;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lp.clartemd.com.pk';
 
   return {
     event,
     timestamp: new Date().toISOString(),
+    meta: {
+      pixel_id: FB_PIXEL_ID,
+      // Falls back to a deterministic id for admin-triggered status events
+      // (which have no matching browser event).
+      event_id: metaEventId ?? `${order.orderNumber}:${event}`,
+      event_name: metaEventName(event),
+      value: order.totalPkr,
+      currency: 'PKR',
+    },
     order: {
       id: order.id,
       order_number: order.orderNumber,

@@ -168,6 +168,7 @@ export async function POST(req: NextRequest) {
         event: 'order.created',
         order,
         items: insertedItems,
+        metaEventId: input.meta_event_id,
       }) as unknown as Record<string, unknown>,
       'order.created',
     );
