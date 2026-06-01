@@ -19,6 +19,66 @@ export const ACNE_GLOW = {
   offerPkr: 6499,
 };
 
+export const ACNE_ESSENTIALS = {
+  slug: 'acne-essentials-protocol',
+  name: 'Acne Essentials Duo',
+  concern: 'acne',
+  itemSkus: ['rescue', 'acne'] as const,
+  offerPkr: 3499,
+};
+
+export interface FunnelBundle {
+  slug: string;
+  name: string;
+  itemSkus: readonly string[];
+  offerPkr: number;
+  tagline: string;
+  description: string;
+  hero: string; // public image path
+}
+
+/** The bundles offered in the funnel, in display order (hero first). */
+export const FUNNEL_BUNDLES: FunnelBundle[] = [
+  {
+    slug: ACNE_GLOW.slug,
+    name: ACNE_GLOW.name,
+    itemSkus: ACNE_GLOW.itemSkus,
+    offerPkr: ACNE_GLOW.offerPkr,
+    tagline: 'Best results · full 12-week routine',
+    description:
+      'The complete protocol — cleanse, clear active breakouts, fade post-acne marks, and restore glow. Rescue Wash, Acne Serum, Vitamin C and Retinol, dermatologist-dosed.',
+    hero: '/protocols/acne-glow-protocol/hero.webp',
+  },
+  {
+    slug: ACNE_ESSENTIALS.slug,
+    name: ACNE_ESSENTIALS.name,
+    itemSkus: ACNE_ESSENTIALS.itemSkus,
+    offerPkr: ACNE_ESSENTIALS.offerPkr,
+    tagline: 'Simple start · 2 essentials',
+    description:
+      'The two essentials to start clearing acne — a salicylic 2% wash that decongests pores, plus a niacinamide 10% + azelaic serum that calms active breakouts. The simplest way to begin.',
+    hero: '/protocols/acne-essentials-protocol/hero.webp',
+  },
+];
+
+export function bundleBySlug(slug: string): FunnelBundle | undefined {
+  return FUNNEL_BUNDLES.find((b) => b.slug === slug);
+}
+
+export interface BundleSavings {
+  listPkr: number;
+  offerPkr: number;
+  savingsPkr: number;
+  savingsPct: number;
+}
+
+/** Savings vs the list-price total for any funnel bundle. */
+export function bundleSavings(b: FunnelBundle): BundleSavings {
+  const listPkr = b.itemSkus.reduce((s, sku) => s + (PRODUCT_META[sku]?.listPricePkr ?? 0), 0);
+  const savingsPkr = listPkr - b.offerPkr;
+  return { listPkr, offerPkr: b.offerPkr, savingsPkr, savingsPct: Math.round((savingsPkr / listPkr) * 100) };
+}
+
 /** The 12-week projection prompt passed to /api/generate-after. */
 export const FUNNEL_AI_PROMPT =
   "Generate a photorealistic projection of this person's skin after 12 weeks of " +

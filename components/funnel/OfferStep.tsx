@@ -1,13 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Banknote, Loader2 } from 'lucide-react';
-import { useCart } from '@/lib/cart/use-cart';
-import { ACNE_GLOW, SHIPPING_PKR, FUNNEL_TIMER_KEY, computeOfferSavings } from '@/lib/funnel/offer';
-import { pushFunnelEvent } from '@/lib/funnel/analytics';
 import Image from 'next/image';
+import { Banknote, Loader2, Check } from 'lucide-react';
+import { useCart } from '@/lib/cart/use-cart';
+import {
+  ACNE_GLOW,
+  SHIPPING_PKR,
+  FUNNEL_TIMER_KEY,
+  FUNNEL_BUNDLES,
+  bundleBySlug,
+  bundleSavings,
+} from '@/lib/funnel/offer';
+import { pushFunnelEvent } from '@/lib/funnel/analytics';
 import { PRODUCT_META } from '@/lib/products/catalog';
-import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
 import { BUNDLE_SKUS, ADDON_SKUS, computeCartTotals } from '@/lib/funnel/shop';
 import { trackMetaPurchase } from '@/lib/funnel/meta';
 import { loadLead } from '@/lib/funnel/lead-storage';
@@ -21,7 +27,8 @@ import { TrustStrip } from '@/components/marketing/TrustStrip';
 import { StarRating } from './StarRating';
 import { ClinicalProof } from './ClinicalProof';
 import { Reviews } from './Reviews';
-import type { ReviewCard } from '@/lib/reviews/types';
+import { CaseStudies } from './CaseStudies';
+import type { ReviewCard, CaseStudy } from '@/lib/reviews/types';
 import type { ScanResult } from './ScanStep';
 
 const PK_CITIES = ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan', 'Peshawar', 'Sialkot', 'Gujranwala', 'Hyderabad', 'Quetta', 'Other'];
@@ -29,28 +36,43 @@ const PK_CITIES = ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad',
 export function OfferStep({
   scan,
   reviews,
+  caseStudies,
   aggregate,
 }: {
   scan: ScanResult;
   reviews: ReviewCard[];
+  caseStudies: CaseStudy[];
   aggregate: { avg: number; count: number };
 }) {
   const { cart, addBundle, removeItem, clearCart } = useCart();
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [prefill] = useState(() => loadLead()); // name/email/phone from the lead gate
-  const savings = computeOfferSavings();
 
-  const bundleInCart = cart.items.some((i) => i.type === 'bundle' && i.slug === ACNE_GLOW.slug);
-  function toggleBundle() {
-    const idx = cart.items.findIndex((i) => i.type === 'bundle' && i.slug === ACNE_GLOW.slug);
-    if (idx >= 0) removeItem(idx);
-    else addBundle(ACNE_GLOW.slug);
+  // The funnel sells one protocol at a time (the two bundles overlap), so
+  // selecting a bundle replaces any other. Individual products stack on top.
+  let currentBundleSlug: string | null = null;
+  for (const i of cart.items) {
+    if (i.type === 'bundle') { currentBundleSlug = i.slug; break; }
+  }
+
+  function selectBundle(slug: string) {
+    let idx = -1;
+    for (let k = 0; k < cart.items.length; k++) {
+      if (cart.items[k].type === 'bundle') { idx = k; break; }
+    }
+    if (idx >= 0) {
+      const existing = cart.items[idx];
+      const sameSlug = existing.type === 'bundle' && existing.slug === slug;
+      removeItem(idx);
+      if (sameSlug) return; // tapped the selected one → deselect
+    }
+    addBundle(slug);
   }
 
   useEffect(() => {
     clearCart();
-    addBundle(ACNE_GLOW.slug);
+    addBundle(ACNE_GLOW.slug); // default to the full protocol (hero offer)
     pushFunnelEvent('offer_viewed');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,7 +80,7 @@ export function OfferStep({
   async function placeOrder(form: HTMLFormElement) {
     setErr(null);
     if (cart.items.length === 0) {
-      setErr('Your cart is empty — add the protocol or a product first.');
+      setErr('Your cart is empty — choose a protocol or add a product first.');
       return;
     }
     setSubmitting(true);
@@ -67,7 +89,7 @@ export function OfferStep({
     const phone = String(fd.get('phone') ?? '');
     const items = cart.items.map((i) =>
       i.type === 'bundle'
-        ? { sku: i.slug, name: ACNE_GLOW.name, qty: 1, price: 0 }
+        ? { sku: i.slug, name: bundleBySlug(i.slug)?.name ?? i.slug, qty: 1, price: 0 }
         : { sku: i.sku, name: PRODUCT_META[i.sku]?.name ?? i.sku, qty: i.qty, price: 0 },
     );
     // One event id shared by the browser Pixel Purchase + the order webhook
@@ -119,62 +141,57 @@ export function OfferStep({
       <OrderTicker />
 
       <Collage beforeUrl={scan.beforeUrl} afterUrl={scan.afterUrl} source={scan.source} />
-      {!scan.afterUrl && (
-        <p className="funnel-note">
-          Our dermatologists will review your photo personally with your order.
-        </p>
-      )}
 
       <ClinicalProof />
 
-      <div className="funnel-offer-card">
-        <div className="funnel-hero-img">
-          <Image
-            src={PROTOCOL_HERO}
-            alt={ACNE_GLOW.name}
-            fill
-            sizes="(max-width: 560px) 100vw, 560px"
-            style={{ objectFit: 'cover' }}
-            priority
-          />
-        </div>
-        <div className="funnel-offer-head">
-          <CountdownTimer
-            label="Offer reverts in"
-            variant="pill"
-            windowMinutes={5}
-            storageKey={FUNNEL_TIMER_KEY}
-          />
-          <LowStockTag sku="acne" />
-        </div>
-
-        <h2 className="funnel-h2">{ACNE_GLOW.name}</h2>
+      {/* Choose-your-protocol */}
+      <div className="funnel-offer-head">
+        <CountdownTimer label="Offer reverts in" variant="pill" windowMinutes={5} storageKey={FUNNEL_TIMER_KEY} />
+        <LowStockTag sku="acne" />
+      </div>
+      <div className="funnel-choose-title">
+        <h2 className="funnel-h2">Choose your protocol</h2>
         <StarRating avg={aggregate.avg} count={aggregate.count} size="sm" />
-        <ul className="funnel-items">
-          {ACNE_GLOW.itemSkus.map((sku) => (
-            <li key={sku}>{PRODUCT_META[sku].name}</li>
-          ))}
-        </ul>
+      </div>
 
-        <div className="funnel-price">
-          <span className="funnel-now">PKR {savings.offerPkr.toLocaleString()}</span>
-          <span className="funnel-was">PKR {savings.listPkr.toLocaleString()}</span>
-          <span className="funnel-save">Save {savings.savingsPkr.toLocaleString()} ({savings.savingsPct}%)</span>
-        </div>
-        <p className="funnel-cod"><Banknote className="h-4 w-4" /> Cash on delivery · + PKR {SHIPPING_PKR} shipping</p>
+      <div className="funnel-bundles">
+        {FUNNEL_BUNDLES.map((b) => {
+          const selected = currentBundleSlug === b.slug;
+          const sv = bundleSavings(b);
+          return (
+            <article key={b.slug} className={`funnel-bundle-card ${selected ? 'is-selected' : ''}`}>
+              <div className="funnel-hero-img">
+                <Image src={b.hero} alt={b.name} fill sizes="(max-width: 560px) 100vw, 560px" style={{ objectFit: 'cover' }} />
+                {selected && <span className="funnel-bundle-badge"><Check className="h-3.5 w-3.5" /> Selected</span>}
+              </div>
+              <div className="funnel-bundle-top">
+                <h3 className="funnel-bundle-name">{b.name}</h3>
+                <span className="funnel-bundle-tag">{b.tagline}</span>
+              </div>
+              <p className="funnel-bundle-desc">{b.description}</p>
+              <ul className="funnel-items">
+                {b.itemSkus.map((sku) => <li key={sku}>{PRODUCT_META[sku].name}</li>)}
+              </ul>
+              <div className="funnel-price">
+                <span className="funnel-now">PKR {b.offerPkr.toLocaleString()}</span>
+                <span className="funnel-was">PKR {sv.listPkr.toLocaleString()}</span>
+                <span className="funnel-save">Save {sv.savingsPkr.toLocaleString()} ({sv.savingsPct}%)</span>
+              </div>
+              <button
+                type="button"
+                className={`funnel-bundle-select ${selected ? 'is-selected' : ''}`}
+                onClick={() => selectBundle(b.slug)}
+              >
+                {selected ? '✓ Selected — tap to remove' : 'Choose this protocol'}
+              </button>
+            </article>
+          );
+        })}
+      </div>
 
-        <button
-          type="button"
-          className={`funnel-bundle-toggle ${bundleInCart ? 'is-in' : ''}`}
-          onClick={toggleBundle}
-        >
-          {bundleInCart
-            ? '✓ Full protocol in your order — tap to remove'
-            : '+ Add the full protocol (best value)'}
-        </button>
-
+      <div className="funnel-offer-card">
         <div className="funnel-products">
-          <p className="funnel-products-label">In your protocol — buy individually</p>
+          <p className="funnel-products-label">Add individual products</p>
           <div className="funnel-products-grid">
             {BUNDLE_SKUS.map((sku) => <ProductCard key={sku} sku={sku} />)}
           </div>
@@ -185,6 +202,8 @@ export function OfferStep({
         </div>
 
         <OrderSummary />
+
+        <p className="funnel-cod"><Banknote className="h-4 w-4" /> Cash on delivery · + PKR {SHIPPING_PKR} shipping</p>
 
         <form
           className="funnel-form"
@@ -207,6 +226,8 @@ export function OfferStep({
 
         <TrustStrip variant="chips" tone="light" limit={5} className="mt-4" />
       </div>
+
+      <CaseStudies cases={caseStudies} heading="Real 12-week before & afters" />
 
       <Reviews reviews={reviews} />
     </section>

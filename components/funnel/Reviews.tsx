@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Star, BadgeCheck } from 'lucide-react';
 import type { ReviewCard } from '@/lib/reviews/types';
 
@@ -21,6 +22,11 @@ export function Reviews({
 
   const card = (r: ReviewCard, key: string, hidden = false) => (
     <article className="funnel-review-card" key={key} aria-hidden={hidden || undefined}>
+      {r.photo && (
+        <div className="funnel-review-photo">
+          <Image src={r.photo} alt={`${r.name}'s result`} fill sizes="270px" style={{ objectFit: 'cover' }} />
+        </div>
+      )}
       <div className="funnel-review-stars" aria-label={`${r.rating} out of 5`}>
         {Array.from({ length: 5 }).map((_, j) => (
           <Star

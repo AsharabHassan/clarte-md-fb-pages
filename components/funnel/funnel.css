@@ -88,14 +88,46 @@
 .funnel-review-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .funnel-review-name { font-size: 12px; font-weight: 600; color: #5b6678; }
 .funnel-verified { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 600; color: #2e7d57; background: #e9f5ee; border-radius: 999px; padding: 2px 7px; white-space: nowrap; }
+.funnel-review-photo { position: relative; width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #f3f5f9; }
+
+/* ── Case studies (before/after from the DB) ─────────────────────── */
+.funnel-cases { margin: 20px 0 8px; }
+.funnel-cases-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: #2e5ba8; margin: 0 0 12px; }
+.funnel-cases-list { display: grid; gap: 14px; }
+.funnel-case-card { border: 1px solid #ece7df; border-radius: 16px; padding: 12px; background: #fff; box-shadow: 0 12px 30px -24px rgba(14,31,58,.4); }
+.funnel-case-media { display: grid; gap: 6px; margin-bottom: 10px; }
+.funnel-case-media.is-split { grid-template-columns: 1fr 1fr; }
+.funnel-case-media.is-pair { grid-template-columns: 1fr; }
+.funnel-case-img { position: relative; aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden; background: #f3f5f9; }
+.funnel-case-img--pair { aspect-ratio: 16 / 9; }
+.funnel-case-img figcaption { position: absolute; bottom: 6px; left: 6px; background: rgba(14,31,58,.82); color: #fff; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+.funnel-case-stars { color: #f5a623; display: flex; gap: 1px; margin-bottom: 6px; }
+.funnel-case-stars .funnel-star-off { color: #d8dee9; }
+.funnel-case-body { font-size: 13.5px; line-height: 1.5; color: #0e1f3a; margin: 0 0 8px; }
+.funnel-case-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 600; color: #5b6678; margin: 0; }
+.funnel-cases-note { font-size: 11px; color: #97a0b0; text-align: center; margin-top: 10px; }
 
 /* ── Protocol hero image ─────────────────────────────────────────── */
 .funnel-hero-img { position: relative; width: 100%; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; margin-bottom: 14px; background: #eef2f8; }
 .funnel-hero-img--scan { margin-top: 18px; box-shadow: 0 18px 40px -26px rgba(14,31,58,.4); }
 
-/* ── Bundle toggle ───────────────────────────────────────────────── */
+/* ── Bundle toggle (legacy single-bundle) ────────────────────────── */
 .funnel-bundle-toggle { width: 100%; min-height: 44px; border-radius: 12px; border: 1px dashed #c9d3e3; background: #f6f9fd; color: #2e5ba8; font-size: 13.5px; font-weight: 600; cursor: pointer; margin-bottom: 14px; transition: background .2s, border-color .2s; }
 .funnel-bundle-toggle.is-in { border-style: solid; border-color: #cfe3d6; background: #eef7f1; color: #2e7d57; }
+
+/* ── Choose your protocol (two bundle cards) ─────────────────────── */
+.funnel-choose-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 4px 0 14px; }
+.funnel-bundles { display: grid; gap: 14px; margin-bottom: 18px; }
+.funnel-bundle-card { border: 1.5px solid #ece7df; border-radius: 20px; padding: 14px; background: #fff; box-shadow: 0 14px 36px -26px rgba(14,31,58,.3); transition: border-color .2s, box-shadow .2s; }
+.funnel-bundle-card.is-selected { border-color: #2e5ba8; box-shadow: 0 18px 40px -22px rgba(46,91,168,.45); }
+.funnel-bundle-card .funnel-hero-img { aspect-ratio: 16/9; margin-bottom: 12px; }
+.funnel-bundle-badge { position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 4px; background: #2e5ba8; color: #fff; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px; z-index: 2; }
+.funnel-bundle-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.funnel-bundle-name { font-size: 19px; font-weight: 600; color: #0e1f3a; }
+.funnel-bundle-tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #2e5ba8; }
+.funnel-bundle-desc { font-size: 13.5px; line-height: 1.5; color: #5b6678; margin: 8px 0; }
+.funnel-bundle-select { width: 100%; min-height: 48px; margin-top: 12px; border-radius: 12px; border: 1.5px solid #2e5ba8; background: #fff; color: #2e5ba8; font-size: 14.5px; font-weight: 600; cursor: pointer; transition: background .2s, color .2s; }
+.funnel-bundle-select.is-selected { background: #2e5ba8; color: #fff; }
 
 /* ── Single-product cards ────────────────────────────────────────── */
 .funnel-products { margin: 4px 0 16px; }

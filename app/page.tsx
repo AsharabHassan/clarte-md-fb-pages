@@ -5,6 +5,6 @@ import { getAcneReviews } from '@/lib/reviews/queries';
 export const revalidate = 300;
 
 export default async function Page() {
-  const { reviews, aggregate } = await getAcneReviews();
-  return <ScanFunnel reviews={reviews} aggregate={aggregate} />;
+  const { reviews, caseStudies, aggregate } = await getAcneReviews();
+  return <ScanFunnel reviews={reviews} caseStudies={caseStudies} aggregate={aggregate} />;
 }

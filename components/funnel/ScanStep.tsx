@@ -9,8 +9,9 @@ import { pushFunnelEvent } from '@/lib/funnel/analytics';
 import type { ZoneSource } from '@/lib/funnel/collage';
 import { StarRating } from './StarRating';
 import { Reviews } from './Reviews';
+import { CaseStudies } from './CaseStudies';
 import { DOCTOR_LINE } from '@/lib/funnel/evidence';
-import type { ReviewCard } from '@/lib/reviews/types';
+import type { ReviewCard, CaseStudy } from '@/lib/reviews/types';
 
 export interface ScanResult {
   beforeUrl: string;      // object URL of the original photo
@@ -53,10 +54,12 @@ const STAGES = [
 export function ScanStep({
   onComplete,
   reviews,
+  caseStudies,
   aggregate,
 }: {
   onComplete: (r: ScanResult) => void;
   reviews: ReviewCard[];
+  caseStudies: CaseStudy[];
   aggregate: { avg: number; count: number };
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -211,7 +214,9 @@ export function ScanStep({
 
       {err && <p className="funnel-error">{err}</p>}
 
-      <Reviews reviews={reviews} heading="Real results, real customers" />
+      <CaseStudies cases={caseStudies} heading="Real 12-week before & afters" />
+
+      <Reviews reviews={reviews} heading="What customers say" />
 
       {busy && (
         <div className="funnel-loader" role="status" aria-live="polite">

@@ -3,7 +3,7 @@
 import { X } from 'lucide-react';
 import { useCart } from '@/lib/cart/use-cart';
 import { PRODUCT_META } from '@/lib/products/catalog';
-import { ACNE_GLOW } from '@/lib/funnel/offer';
+import { bundleBySlug } from '@/lib/funnel/offer';
 import { computeCartTotals, lineUnitPkr } from '@/lib/funnel/shop';
 
 /** Live cart summary: line items (removable) + subtotal / shipping / total. */
@@ -23,7 +23,9 @@ export function OrderSummary() {
     <div className="funnel-summary">
       <div className="funnel-summary-title">Your order</div>
       {cart.items.map((item, idx) => {
-        const name = item.type === 'bundle' ? ACNE_GLOW.name : (PRODUCT_META[item.sku]?.shortName ?? item.sku);
+        const name = item.type === 'bundle'
+          ? (bundleBySlug(item.slug)?.name ?? item.slug)
+          : (PRODUCT_META[item.sku]?.shortName ?? item.sku);
         const line = lineUnitPkr(item) * item.qty;
         return (
           <div className="funnel-summary-line" key={item.type === 'bundle' ? `b-${item.slug}` : `p-${item.sku}`}>

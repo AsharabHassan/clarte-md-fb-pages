@@ -5,7 +5,7 @@
  */
 import type { Cart } from '@/lib/cart/types';
 import { PRODUCT_META } from '@/lib/products/catalog';
-import { ACNE_GLOW, SHIPPING_PKR } from './offer';
+import { SHIPPING_PKR, bundleBySlug } from './offer';
 
 /** The four products that make up the bundle, sold individually too. */
 export const BUNDLE_SKUS = ['rescue', 'acne', 'vitc', 'reti'] as const;
@@ -19,9 +19,9 @@ export interface CartTotals {
   count: number;
 }
 
-/** Line-item unit price for display: bundle = offer price, product = catalog price. */
+/** Line-item unit price for display: bundle = its offer price, product = catalog price. */
 export function lineUnitPkr(item: Cart['items'][number]): number {
-  if (item.type === 'bundle') return ACNE_GLOW.offerPkr;
+  if (item.type === 'bundle') return bundleBySlug(item.slug)?.offerPkr ?? 0;
   return PRODUCT_META[item.sku]?.pricePkr ?? 0;
 }
 

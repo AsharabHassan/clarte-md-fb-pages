@@ -9,7 +9,7 @@ export const PRODUCT_IMAGE: Record<string, string> = {
   vitc: 'https://cdn.shopify.com/s/files/1/0782/5113/1112/files/3390b799-35fe-425b-bae9-41e4c8e41139.png?v=1773338016',
   reti: 'https://cdn.shopify.com/s/files/1/0782/5113/1112/files/Gemini_Generated_Image_rwcfs4rwcfs4rwcf.png?v=1773881855',
   spf: 'https://cdn.shopify.com/s/files/1/0782/5113/1112/files/91edf02b-ef9c-4062-a6b9-f0975d941393.png?v=1773337514',
-  ha: 'https://clartemd.com.pk/cdn/shop/files/d9a4c8e3-fcbb-4411-b5a3-fb59422d0040.png',
+  ha: 'https://clartemd.com.pk/products/ha/hero.webp',
   prep: 'https://cdn.shopify.com/s/files/1/0782/5113/1112/files/Prep.png?v=1773743330',
 };
 
