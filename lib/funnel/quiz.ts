@@ -84,30 +84,30 @@ export interface BeforeAfterPair {
   alt: string;
 }
 
-// Real customer pairs hosted on the main site (host whitelisted in
-// next.config.ts). Filenames are placeholders to be replaced with the
-// actual uploaded pairs. Cystic intentionally has NO pair — it falls back
-// to `breakouts` via effectiveAcneType() rather than faking a cystic result.
-const BASE = 'https://clartemd.com.pk/protocols/acne-glow-protocol/visual-studies';
+// Real consented customer pairs, served locally from /public. Selected by
+// the Q1 acne-type answer. Cystic intentionally has NO pair of its own — it
+// falls back to `breakouts` via effectiveAcneType() rather than faking a
+// cystic result.
+const BASE = '/protocols/acne-glow-protocol/visual-studies';
 export const BEFORE_AFTER: Record<Exclude<AcneType, 'cystic'>, BeforeAfterPair> = {
   blackheads: {
-    beforeUrl: `${BASE}/case-blackheads-before.webp`,
-    afterUrl: `${BASE}/case-blackheads-after.webp`,
-    alt: 'Clogged pores cleared after 12 weeks',
+    beforeUrl: `${BASE}/case-blackheads-before.jpg`,
+    afterUrl: `${BASE}/case-blackheads-after.jpg`,
+    alt: 'Congestion and clogged pores cleared after 12 weeks',
   },
   breakouts: {
-    beforeUrl: `${BASE}/case-breakouts-before.webp`,
-    afterUrl: `${BASE}/case-breakouts-after.webp`,
+    beforeUrl: `${BASE}/case-breakouts-before.jpg`,
+    afterUrl: `${BASE}/case-breakouts-after.jpg`,
     alt: 'Active breakouts calmed after 12 weeks',
   },
   marks: {
-    beforeUrl: `${BASE}/case-marks-before.webp`,
-    afterUrl: `${BASE}/case-marks-after.webp`,
+    beforeUrl: `${BASE}/case-marks-before.jpg`,
+    afterUrl: `${BASE}/case-marks-after.jpg`,
     alt: 'Post-acne dark marks faded after 12 weeks',
   },
   mix: {
-    beforeUrl: `${BASE}/case-mix-before.webp`,
-    afterUrl: `${BASE}/case-mix-after.webp`,
+    beforeUrl: `${BASE}/case-mix-before.jpg`,
+    afterUrl: `${BASE}/case-mix-after.jpg`,
     alt: 'Overall skin transformation after 12 weeks',
   },
 };

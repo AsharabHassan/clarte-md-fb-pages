@@ -5,10 +5,12 @@ import NextImage from 'next/image';
 import { QuizStep } from './QuizStep';
 import { LeadStep } from './LeadStep';
 import { OfferStep } from './OfferStep';
+import { MatchedResult } from './MatchedResult';
 import { Reviews } from './Reviews';
 import { CaseStudies } from './CaseStudies';
 import {
   QUIZ_QUESTIONS,
+  beforeAfterForAcneType,
   personalizationSentence,
   type QuizAnswers,
 } from '@/lib/funnel/quiz';
@@ -70,6 +72,21 @@ export function QuizFunnel({
           <span className="funnel-doctor funnel-doctor--inline">{DOCTOR_LINE}</span>
         </div>
 
+        <ol className="quiz-steps" aria-label="How it works">
+          <li className="quiz-step">
+            <span className="quiz-step__num">1</span>
+            <span className="quiz-step__label">Answer a few questions</span>
+          </li>
+          <li className="quiz-step">
+            <span className="quiz-step__num">2</span>
+            <span className="quiz-step__label">Get your personalised match</span>
+          </li>
+          <li className="quiz-step">
+            <span className="quiz-step__num">3</span>
+            <span className="quiz-step__label">Order your protocol</span>
+          </li>
+        </ol>
+
         <div className="funnel-hero-img funnel-hero-img--scan">
           <NextImage
             src={PROTOCOL_HERO}
@@ -127,6 +144,7 @@ export function QuizFunnel({
   const full = answers as QuizAnswers;
   return (
     <QuizOffer
+      pair={beforeAfterForAcneType(full.q1)}
       caption={personalizationSentence(full)}
       reviews={reviews}
       caseStudies={caseStudies}
@@ -137,11 +155,13 @@ export function QuizFunnel({
 
 /** Wrapper so we can fire `result_viewed` exactly once on mount. */
 function QuizOffer({
+  pair,
   caption,
   reviews,
   caseStudies,
   aggregate,
 }: {
+  pair: ReturnType<typeof beforeAfterForAcneType>;
   caption: string;
   reviews: ReviewCard[];
   caseStudies: CaseStudy[];
@@ -153,10 +173,11 @@ function QuizOffer({
   return (
     <OfferStep
       hero={
-        <section className="quiz-result-hero">
-          <h1 className="funnel-h1">Your match: The Acne Glow Protocol</h1>
-          <p className="funnel-sub quiz-result-caption">{caption}</p>
-        </section>
+        <MatchedResult
+          pair={pair}
+          headline="Your match: The Acne Glow Protocol"
+          caption={caption}
+        />
       }
       page="quiz-funnel"
       usedAiPreview={false}
