@@ -177,11 +177,15 @@ export function ScanStep({
         />
       </div>
 
+      {/*
+        No `capture` attribute: this is the "upload a photo instead" path,
+        so mobile browsers must open the file/gallery picker rather than
+        forcing the camera. The live camera is handled by <CameraCapture>.
+      */}
       <input
         ref={inputRef}
         type="file"
         accept="image/*"
-        capture="user"
         hidden
         onChange={(e) => {
           const f = e.target.files?.[0];
