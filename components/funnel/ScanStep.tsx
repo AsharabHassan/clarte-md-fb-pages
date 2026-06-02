@@ -62,7 +62,6 @@ export function ScanStep({
   caseStudies: CaseStudy[];
   aggregate: { avg: number; count: number };
 }) {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [stageIdx, setStageIdx] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -177,25 +176,8 @@ export function ScanStep({
         />
       </div>
 
-      {/*
-        No `capture` attribute: this is the "upload a photo instead" path,
-        so mobile browsers must open the file/gallery picker rather than
-        forcing the camera. The live camera is handled by <CameraCapture>.
-      */}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        hidden
-        onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) handleFile(f);
-        }}
-      />
-
       <CameraCapture
         onCapture={handleFile}
-        onUploadFallback={() => inputRef.current?.click()}
         disabled={busy}
       />
 

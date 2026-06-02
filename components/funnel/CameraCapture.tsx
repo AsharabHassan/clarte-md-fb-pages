@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Camera, SwitchCamera, X, Loader2, Upload } from 'lucide-react';
+import { Camera, SwitchCamera, X, Loader2 } from 'lucide-react';
 
 type Facing = 'user' | 'environment';
 
@@ -21,12 +21,9 @@ type Facing = 'user' | 'environment';
  */
 export function CameraCapture({
   onCapture,
-  onUploadFallback,
   disabled,
 }: {
   onCapture: (file: File) => void;
-  /** Trigger the parent's hidden file input (always-available fallback). */
-  onUploadFallback: () => void;
   disabled?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -71,7 +68,7 @@ export function CameraCapture({
       const devices = await navigator.mediaDevices.enumerateDevices();
       setCanSwitch(devices.filter((d) => d.kind === 'videoinput').length > 1);
     } catch {
-      setErr('Couldn’t access your camera. Allow camera access, or upload a photo instead.');
+      setErr('Couldn’t access your camera. Please allow camera access and try again.');
       setOpen(false);
     } finally {
       setStarting(false);
@@ -80,7 +77,7 @@ export function CameraCapture({
 
   async function openCamera() {
     if (!supported) {
-      onUploadFallback();
+      setErr('Live camera isn’t available on this device or browser.');
       return;
     }
     setOpen(true);
@@ -155,9 +152,6 @@ export function CameraCapture({
         >
           <span className="funnel-cam-shutter-dot" />
         </button>
-        <button type="button" className="funnel-cam-upload" onClick={onUploadFallback}>
-          <Upload className="h-4 w-4" /> Upload a photo instead
-        </button>
       </div>
     );
   }
@@ -165,13 +159,8 @@ export function CameraCapture({
   return (
     <>
       <button type="button" className="funnel-cta" disabled={disabled} onClick={openCamera}>
-        <Camera className="h-5 w-5" /> {supported ? 'Open camera' : 'Take / upload photo'}
+        <Camera className="h-5 w-5" /> Open camera
       </button>
-      {supported && (
-        <button type="button" className="funnel-cam-altupload" onClick={onUploadFallback} disabled={disabled}>
-          <Upload className="h-4 w-4" /> Upload a photo instead
-        </button>
-      )}
       {err && <p className="funnel-error">{err}</p>}
     </>
   );
