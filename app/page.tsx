@@ -1,10 +1,10 @@
-import { ScanFunnel } from '@/components/funnel/ScanFunnel';
 import { getAcneReviews } from '@/lib/reviews/queries';
+import { QuizFunnelClient } from './QuizFunnelClient';
 
-// Re-fetch the reviews from the DB at most every 5 minutes.
+// Quiz funnel is the default landing. Re-fetch reviews at most every 5 min.
 export const revalidate = 300;
 
 export default async function Page() {
-  const { reviews, caseStudies, aggregate } = await getAcneReviews();
-  return <ScanFunnel reviews={reviews} caseStudies={caseStudies} aggregate={aggregate} />;
+  const data = await getAcneReviews();
+  return <QuizFunnelClient data={data} />;
 }
