@@ -85,6 +85,7 @@ export function OfferStep({
 
   async function placeOrder(form: HTMLFormElement) {
     setErr(null);
+    pushFunnelEvent('cod_checkout_clicked');
     if (cart.items.length === 0) {
       setErr('Your cart is empty — choose a protocol or add a product first.');
       return;
