@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ScanStep, type ScanResult } from './ScanStep';
 import { LeadStep } from './LeadStep';
 import { OfferStep } from './OfferStep';
+import { Collage } from './Collage';
 import type { ReviewCard, CaseStudy } from '@/lib/reviews/types';
 import './funnel.css';
 
@@ -24,7 +25,17 @@ export function ScanFunnel({
     return <ScanStep onComplete={setScan} reviews={reviews} caseStudies={caseStudies} aggregate={aggregate} />;
   }
   if (!leadDone) {
-    return <LeadStep scan={scan} onComplete={() => setLeadDone(true)} />;
+    return <LeadStep aiSessionId={scan.aiSessionId} onComplete={() => setLeadDone(true)} />;
   }
-  return <OfferStep scan={scan} reviews={reviews} caseStudies={caseStudies} aggregate={aggregate} />;
+  return (
+    <OfferStep
+      hero={<Collage beforeUrl={scan.beforeUrl} afterUrl={scan.afterUrl} source={scan.source} />}
+      page="scan-funnel"
+      usedAiPreview={Boolean(scan.afterUrl)}
+      aiSessionId={scan.aiSessionId}
+      reviews={reviews}
+      caseStudies={caseStudies}
+      aggregate={aggregate}
+    />
+  );
 }
