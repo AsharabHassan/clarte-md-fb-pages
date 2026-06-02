@@ -12,6 +12,22 @@
 .funnel-cta:disabled { opacity: .7; cursor: default; }
 .funnel-error { color: #c14b36; font-size: 13.5px; margin-top: 10px; }
 
+/* ── In-browser camera capture ───────────────────────────────────── */
+.funnel-cam-altupload { display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 44px; margin-top: 10px; border-radius: 12px; background: none; border: 1px solid #d7dce6; color: #5b6678; font-size: 14px; font-weight: 500; cursor: pointer; }
+.funnel-cam-altupload:disabled { opacity: .6; cursor: default; }
+.funnel-cam { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 18px; }
+.funnel-cam-frame { position: relative; width: 100%; aspect-ratio: 3 / 4; max-width: 420px; border-radius: 20px; overflow: hidden; background: #0e1f3a; box-shadow: 0 20px 44px -24px rgba(14,31,58,.5); }
+.funnel-cam-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.funnel-cam-video.is-mirrored { transform: scaleX(-1); }
+.funnel-cam-loading { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; background: rgba(14,31,58,.4); }
+.funnel-cam-close, .funnel-cam-switch { position: absolute; top: 12px; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 999px; border: none; background: rgba(14,31,58,.55); color: #fff; cursor: pointer; backdrop-filter: blur(4px); }
+.funnel-cam-close { right: 12px; }
+.funnel-cam-switch { left: 12px; }
+.funnel-cam-shutter { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 999px; border: 4px solid #2e5ba8; background: #fff; cursor: pointer; box-shadow: 0 8px 20px -8px rgba(46,91,168,.6); }
+.funnel-cam-shutter:disabled { opacity: .5; cursor: default; }
+.funnel-cam-shutter-dot { width: 52px; height: 52px; border-radius: 999px; background: #2e5ba8; }
+.funnel-cam-upload { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; color: #5b6678; font-size: 13.5px; font-weight: 500; cursor: pointer; text-decoration: underline; }
+
 /* ── Lead-capture gate ───────────────────────────────────────────── */
 .funnel-lead { padding-top: 40px; }
 .funnel-lead-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .14em; color: #2e7d57; background: #eef7f1; border-radius: 999px; padding: 5px 12px; margin-bottom: 16px; }

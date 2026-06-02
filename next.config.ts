@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
   // by Turbopack. Per Drizzle's Supabase guide.
   serverExternalPackages: ['postgres', 'drizzle-orm'],
 
+  // Dev-only: allow the LAN IP and the Cloudflare quick-tunnel host to
+  // load /_next/* HMR assets cross-origin (needed to test the in-browser
+  // camera over HTTPS on a phone). Has no effect on production builds.
+  allowedDevOrigins: ['192.168.10.11', '*.trycloudflare.com'],
+
   /* ────────────────── Image optimisation ──────────────────
      - formats: serve modern webp/avif when the browser accepts it.
      - deviceSizes: shrink the breakpoints we ship srcsets for.

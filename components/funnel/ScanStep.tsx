@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import NextImage from 'next/image';
-import { Camera, Loader2 } from 'lucide-react';
 import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
 import { ACNE_GLOW, FUNNEL_AI_PROMPT } from '@/lib/funnel/offer';
 import { pushFunnelEvent } from '@/lib/funnel/analytics';
@@ -10,6 +9,7 @@ import type { ZoneSource } from '@/lib/funnel/collage';
 import { StarRating } from './StarRating';
 import { Reviews } from './Reviews';
 import { CaseStudies } from './CaseStudies';
+import { CameraCapture } from './CameraCapture';
 import { DOCTOR_LINE } from '@/lib/funnel/evidence';
 import type { ReviewCard, CaseStudy } from '@/lib/reviews/types';
 
@@ -68,7 +68,6 @@ export function ScanStep({
   const [progress, setProgress] = useState(0);
   const [preview, setPreview] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const [consent, setConsent] = useState(false);
 
   const stageTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const progressTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -97,10 +96,6 @@ export function ScanStep({
 
   async function handleFile(file: File) {
     setErr(null);
-    if (!consent) {
-      setErr('Please tick the consent box so we can analyze your photo.');
-      return;
-    }
     setBusy(true);
     pushFunnelEvent('scan_started');
     startLoader();
@@ -194,23 +189,11 @@ export function ScanStep({
         }}
       />
 
-      <label className="funnel-consent">
-        <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
-        <span>I agree to Clarté analyzing my photo to generate a skin projection.</span>
-      </label>
-
-      <button
-        type="button"
-        className="funnel-cta"
+      <CameraCapture
+        onCapture={handleFile}
+        onUploadFallback={() => inputRef.current?.click()}
         disabled={busy}
-        onClick={() => inputRef.current?.click()}
-      >
-        {busy ? (
-          <><Loader2 className="h-5 w-5 animate-spin" /> Analysing…</>
-        ) : (
-          <><Camera className="h-5 w-5" /> Take / upload photo</>
-        )}
-      </button>
+      />
 
       {err && <p className="funnel-error">{err}</p>}
 
