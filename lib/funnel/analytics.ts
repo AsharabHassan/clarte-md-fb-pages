@@ -10,7 +10,15 @@ export type FunnelEvent =
   | 'lead_captured'
   | 'offer_viewed'
   | 'add_shipping'
-  | 'order_placed';
+  | 'order_placed'
+  // quiz funnel — per-step drop-off instrumentation
+  | 'quiz_start'
+  | 'quiz_q1_complete'
+  | 'quiz_q2_complete'
+  | 'quiz_q3_complete'
+  | 'quiz_q4_complete'
+  | 'result_viewed'
+  | 'cod_checkout_clicked';
 
 export function pushFunnelEvent(event: FunnelEvent, params: Record<string, unknown> = {}): void {
   if (typeof window === 'undefined') return;
