@@ -33,3 +33,15 @@ export function trackMetaPurchase(valuePkr: number, eventId: string): void {
   if (typeof fbq !== 'function') return;
   fbq('track', 'Purchase', { value: valuePkr, currency: 'PKR' }, { eventID: eventId });
 }
+
+/**
+ * Fire a browser Pixel `Lead` with an explicit eventID so it dedupes
+ * against the server-side CAPI `Lead` carrying the same id (forwarded by
+ * the lead webhook). No-op if the Pixel hasn't loaded or on the server.
+ */
+export function trackMetaLead(eventId: string): void {
+  if (typeof window === 'undefined') return;
+  const fbq = (window as unknown as { fbq?: Fbq }).fbq;
+  if (typeof fbq !== 'function') return;
+  fbq('track', 'Lead', {}, { eventID: eventId });
+}
