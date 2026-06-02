@@ -1,16 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import NextImage from 'next/image';
 import { QuizStep } from './QuizStep';
 import { LeadStep } from './LeadStep';
 import { OfferStep } from './OfferStep';
-import { MatchedResult } from './MatchedResult';
+import { Reviews } from './Reviews';
+import { CaseStudies } from './CaseStudies';
 import {
   QUIZ_QUESTIONS,
-  beforeAfterForAcneType,
   personalizationSentence,
   type QuizAnswers,
 } from '@/lib/funnel/quiz';
+import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
 import { pushFunnelEvent, type FunnelEvent } from '@/lib/funnel/analytics';
 import { DOCTOR_LINE } from '@/lib/funnel/evidence';
 import { StarRating } from './StarRating';
@@ -67,12 +69,28 @@ export function QuizFunnel({
           <StarRating avg={aggregate.avg} count={aggregate.count} />
           <span className="funnel-doctor funnel-doctor--inline">{DOCTOR_LINE}</span>
         </div>
+
+        <div className="funnel-hero-img funnel-hero-img--scan">
+          <NextImage
+            src={PROTOCOL_HERO}
+            alt="The Acne Glow Protocol"
+            fill
+            sizes="(max-width: 560px) 100vw, 560px"
+            style={{ objectFit: 'cover' }}
+            priority
+          />
+        </div>
+
         <button type="button" className="funnel-cta" onClick={start}>
           Start my skin quiz →
         </button>
         <button type="button" className="quiz-secondary-link" onClick={onChooseScan}>
           Prefer an AI photo scan instead? Tap here
         </button>
+
+        <CaseStudies cases={caseStudies} heading="Real 12-week before & afters" />
+
+        <Reviews reviews={reviews} heading="What customers say" />
       </section>
     );
   }
@@ -107,10 +125,8 @@ export function QuizFunnel({
 
   // ── Offer / result ───────────────────────────────────────────────
   const full = answers as QuizAnswers;
-  const pair = beforeAfterForAcneType(full.q1);
   return (
     <QuizOffer
-      pair={pair}
       caption={personalizationSentence(full)}
       reviews={reviews}
       caseStudies={caseStudies}
@@ -121,13 +137,11 @@ export function QuizFunnel({
 
 /** Wrapper so we can fire `result_viewed` exactly once on mount. */
 function QuizOffer({
-  pair,
   caption,
   reviews,
   caseStudies,
   aggregate,
 }: {
-  pair: ReturnType<typeof beforeAfterForAcneType>;
   caption: string;
   reviews: ReviewCard[];
   caseStudies: CaseStudy[];
@@ -139,11 +153,10 @@ function QuizOffer({
   return (
     <OfferStep
       hero={
-        <MatchedResult
-          pair={pair}
-          headline="Your match: The Acne Glow Protocol"
-          caption={caption}
-        />
+        <section className="quiz-result-hero">
+          <h1 className="funnel-h1">Your match: The Acne Glow Protocol</h1>
+          <p className="funnel-sub quiz-result-caption">{caption}</p>
+        </section>
       }
       page="quiz-funnel"
       usedAiPreview={false}
