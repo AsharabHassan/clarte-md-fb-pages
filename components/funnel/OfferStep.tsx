@@ -17,7 +17,6 @@ import { PRODUCT_META } from '@/lib/products/catalog';
 import { BUNDLE_SKUS, ADDON_SKUS, computeCartTotals } from '@/lib/funnel/shop';
 import { trackMetaPurchase } from '@/lib/funnel/meta';
 import { loadLead } from '@/lib/funnel/lead-storage';
-import { Collage } from './Collage';
 import { ProductCard } from './ProductCard';
 import { OrderSummary } from './OrderSummary';
 import { CountdownTimer } from '@/components/marketing/CountdownTimer';
@@ -29,17 +28,24 @@ import { ClinicalProof } from './ClinicalProof';
 import { Reviews } from './Reviews';
 import { CaseStudies } from './CaseStudies';
 import type { ReviewCard, CaseStudy } from '@/lib/reviews/types';
-import type { ScanResult } from './ScanStep';
 
 const PK_CITIES = ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan', 'Peshawar', 'Sialkot', 'Gujranwala', 'Hyderabad', 'Quetta', 'Other'];
 
 export function OfferStep({
-  scan,
+  hero,
+  page,
+  usedAiPreview,
+  aiSessionId,
   reviews,
   caseStudies,
   aggregate,
 }: {
-  scan: ScanResult;
+  /** The before/after visual at the top of the offer (Collage or MatchedResult). */
+  hero: React.ReactNode;
+  /** sourcePage recorded on the order ('scan-funnel' | 'quiz-funnel'). */
+  page: string;
+  usedAiPreview: boolean;
+  aiSessionId?: string;
   reviews: ReviewCard[];
   caseStudies: CaseStudy[];
   aggregate: { avg: number; count: number };
@@ -102,7 +108,7 @@ export function OfferStep({
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           concern: 'acne',
-          page: 'scan-funnel',
+          page,
           contact: { name: fd.get('name'), phone, email: fd.get('email') },
           shipping: {
             address: fd.get('address'),
@@ -113,10 +119,10 @@ export function OfferStep({
           items,
           totals: { subtotal: 0, shipping: 0, total: 0 }, // server recomputes
           bundle_in_cart: cart.items.some((i) => i.type === 'bundle'),
-          used_ai_preview: Boolean(scan.afterUrl),
+          used_ai_preview: usedAiPreview,
           ts: new Date().toISOString(),
           meta_event_id: metaEventId,
-          ...(scan.aiSessionId ? { ai_session_id: scan.aiSessionId } : {}),
+          ...(aiSessionId ? { ai_session_id: aiSessionId } : {}),
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -140,7 +146,7 @@ export function OfferStep({
     <section className="funnel-offer">
       <OrderTicker />
 
-      <Collage beforeUrl={scan.beforeUrl} afterUrl={scan.afterUrl} source={scan.source} />
+      {hero}
 
       <ClinicalProof />
 
