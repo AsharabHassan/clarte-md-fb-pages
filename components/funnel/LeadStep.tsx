@@ -91,7 +91,7 @@ export function LeadStep({
         <input
           name="phone"
           required
-          pattern="[0-9+\-\s()]{7,32}"
+          pattern="[0-9+\-\s\(\)]{7,32}"
           inputMode="tel"
           placeholder="03XX XXXXXXX"
           autoComplete="tel"

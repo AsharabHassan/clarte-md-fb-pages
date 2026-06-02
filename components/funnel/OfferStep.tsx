@@ -217,7 +217,7 @@ export function OfferStep({
           onSubmit={(e) => { e.preventDefault(); placeOrder(e.currentTarget); }}
         >
           <input name="name" required placeholder="Full name" autoComplete="name" defaultValue={prefill?.name ?? ''} />
-          <input name="phone" required pattern="[0-9+\-\s()]{7,32}" inputMode="tel" placeholder="03XX XXXXXXX" autoComplete="tel" defaultValue={prefill?.phone ?? ''} />
+          <input name="phone" required pattern="[0-9+\-\s\(\)]{7,32}" inputMode="tel" placeholder="03XX XXXXXXX" autoComplete="tel" defaultValue={prefill?.phone ?? ''} />
           <input name="email" type="email" required placeholder="Email" autoComplete="email" defaultValue={prefill?.email ?? ''} />
           <input name="address" required minLength={3} placeholder="Street address" autoComplete="street-address" />
           <select name="city" required defaultValue="">
