@@ -29,7 +29,7 @@ export function buildWhatsAppOrderMessage(cart: Cart): string {
     '',
     ...lines,
     '',
-    `Total: PKR ${totalPkr.toLocaleString()} (incl. shipping)`,
+    `Total: PKR ${totalPkr.toLocaleString('en-PK')} (incl. shipping)`,
   ].join('\n');
 }
 
