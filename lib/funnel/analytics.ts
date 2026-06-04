@@ -18,7 +18,11 @@ export type FunnelEvent =
   | 'quiz_q3_complete'
   | 'quiz_q4_complete'
   | 'result_viewed'
-  | 'cod_checkout_clicked';
+  | 'cod_checkout_clicked'
+  // result-page order CTAs + sticky cart
+  | 'order_now_clicked'
+  | 'whatsapp_order_clicked'
+  | 'sticky_checkout_clicked';
 
 export function pushFunnelEvent(event: FunnelEvent, params: Record<string, unknown> = {}): void {
   if (typeof window === 'undefined') return;
