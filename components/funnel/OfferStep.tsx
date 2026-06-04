@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { Banknote, Loader2, Check } from 'lucide-react';
 import { useCart } from '@/lib/cart/use-cart';
@@ -27,6 +27,7 @@ import { StarRating } from './StarRating';
 import { ClinicalProof } from './ClinicalProof';
 import { Reviews } from './Reviews';
 import { CaseStudies } from './CaseStudies';
+import { StickyCartBar } from './StickyCartBar';
 import type { ReviewCard, CaseStudy } from '@/lib/reviews/types';
 
 const PK_CITIES = ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan', 'Peshawar', 'Sialkot', 'Gujranwala', 'Hyderabad', 'Quetta', 'Other'];
@@ -54,6 +55,12 @@ export function OfferStep({
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [prefill] = useState(() => loadLead()); // name/email/phone from the lead gate
+  const formRef = useRef<HTMLFormElement>(null);
+  const [formInView, setFormInView] = useState(false);
+
+  function scrollToCheckout() {
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   // The funnel sells one protocol at a time (the two bundles overlap), so
   // selecting a bundle replaces any other. Individual products stack on top.
@@ -81,6 +88,17 @@ export function OfferStep({
     addBundle(ACNE_GLOW.slug); // default to the full protocol (hero offer)
     pushFunnelEvent('offer_viewed');
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const el = formRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setFormInView(entry.isIntersecting),
+      { threshold: 0.1 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
   }, []);
 
   async function placeOrder(form: HTMLFormElement) {
@@ -149,6 +167,17 @@ export function OfferStep({
 
       {hero}
 
+      <button
+        type="button"
+        className="funnel-cta funnel-order-now"
+        onClick={() => {
+          pushFunnelEvent('order_now_clicked', { placement: 'hero' });
+          scrollToCheckout();
+        }}
+      >
+        Order now →
+      </button>
+
       <ClinicalProof />
 
       {/* Choose-your-protocol */}
@@ -196,6 +225,17 @@ export function OfferStep({
         })}
       </div>
 
+      <button
+        type="button"
+        className="funnel-cta funnel-order-now"
+        onClick={() => {
+          pushFunnelEvent('order_now_clicked', { placement: 'after-protocols' });
+          scrollToCheckout();
+        }}
+      >
+        Order now →
+      </button>
+
       <div className="funnel-offer-card">
         <div className="funnel-products">
           <p className="funnel-products-label">Add individual products</p>
@@ -213,6 +253,7 @@ export function OfferStep({
         <p className="funnel-cod"><Banknote className="h-4 w-4" /> Cash on delivery · + PKR {SHIPPING_PKR} shipping</p>
 
         <form
+          ref={formRef}
           className="funnel-form"
           onSubmit={(e) => { e.preventDefault(); placeOrder(e.currentTarget); }}
         >
@@ -237,6 +278,8 @@ export function OfferStep({
       <CaseStudies cases={caseStudies} heading="Real 12-week before & afters" />
 
       <Reviews reviews={reviews} />
+
+      <StickyCartBar visible={!formInView} onCheckout={scrollToCheckout} />
     </section>
   );
 }
