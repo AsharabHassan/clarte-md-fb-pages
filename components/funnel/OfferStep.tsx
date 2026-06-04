@@ -169,6 +169,7 @@ export function OfferStep({
 
       <button
         type="button"
+        aria-label="Order now"
         className="funnel-cta funnel-order-now"
         onClick={() => {
           pushFunnelEvent('order_now_clicked', { placement: 'hero' });
@@ -227,6 +228,7 @@ export function OfferStep({
 
       <button
         type="button"
+        aria-label="Order now"
         className="funnel-cta funnel-order-now"
         onClick={() => {
           pushFunnelEvent('order_now_clicked', { placement: 'after-protocols' });
