@@ -3,9 +3,7 @@
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '@/lib/cart/use-cart';
 import { computeCartTotals } from '@/lib/funnel/shop';
-import { bundleBySlug } from '@/lib/funnel/offer';
-import { PRODUCT_META } from '@/lib/products/catalog';
-import { buildWhatsAppOrderLink } from '@/lib/funnel/whatsapp';
+import { buildWhatsAppOrderLink, cartItemLabel } from '@/lib/funnel/whatsapp';
 import { pushFunnelEvent } from '@/lib/funnel/analytics';
 
 /**
@@ -26,10 +24,7 @@ export function StickyCartBar({
 
   const totals = computeCartTotals(cart);
   const first = cart.items[0];
-  const firstLabel =
-    first.type === 'bundle'
-      ? bundleBySlug(first.slug)?.name ?? first.slug
-      : PRODUCT_META[first.sku]?.shortName ?? first.sku;
+  const firstLabel = cartItemLabel(first);
   const extra = cart.items.length - 1;
   const label = extra > 0 ? `${firstLabel} +${extra} more` : firstLabel;
   const waLink = buildWhatsAppOrderLink(cart);

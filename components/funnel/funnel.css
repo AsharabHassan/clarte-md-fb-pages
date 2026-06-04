@@ -204,7 +204,7 @@
   font-size: 14px; font-weight: 600; text-decoration: none;
 }
 .funnel-sticky-checkout {
-  display: inline-flex; align-items: center; height: 44px; padding: 0 18px;
+  display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 18px;
   border-radius: 999px; border: none; background: #2e5ba8; color: #fff;
   font-size: 14px; font-weight: 700; cursor: pointer;
 }
