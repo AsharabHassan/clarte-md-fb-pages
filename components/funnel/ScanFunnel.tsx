@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import NextImage from 'next/image';
-import { bundleBySlug, LEAD_BUNDLE_SLUG } from '@/lib/funnel/offer';
+import { bundleBySlug } from '@/lib/funnel/offer';
+import { getConcernConfig } from '@/lib/funnel/concern-config';
 import { ScanStep, type ScanResult } from './ScanStep';
 import { LeadStep } from './LeadStep';
 import { OfferStep } from './OfferStep';
@@ -11,30 +12,30 @@ import type { ReviewCard, CaseStudy } from '@/lib/reviews/types';
 import './funnel.css';
 
 export function ScanFunnel({
+  concern = 'acne',
   reviews,
   caseStudies,
   aggregate,
 }: {
+  concern?: string;
   reviews: ReviewCard[];
   caseStudies: CaseStudy[];
   aggregate: { avg: number; count: number };
 }) {
+  const config = getConcernConfig(concern);
   const [scan, setScan] = useState<ScanResult | null>(null);
   const [leadDone, setLeadDone] = useState(false);
   const [directBuy, setDirectBuy] = useState(false);
 
-  // Direct buy: user skipped the scan — straight to the offer/checkout.
   if (directBuy) {
-    const lead = bundleBySlug(LEAD_BUNDLE_SLUG)!;
+    const lead = bundleBySlug(config.leadSlug)!;
     return (
       <OfferStep
+        config={config}
         hero={
           <section className="funnel-direct-hero">
             <h1 className="funnel-h1">{lead.name}</h1>
-            <p className="funnel-sub">
-              Start clearing acne from just PKR {lead.offerPkr.toLocaleString()} —
-              niacinamide 10% + azelaic acid, cash on delivery across Pakistan.
-            </p>
+            <p className="funnel-sub">{config.copy.directBuySub(lead.offerPkr)}</p>
             <div className="funnel-hero-img funnel-hero-img--scan">
               <NextImage
                 src={lead.hero}
@@ -56,15 +57,15 @@ export function ScanFunnel({
     );
   }
 
-  // Scan → Lead (gate) → Offer (results).
   if (!scan) {
-    return <ScanStep onComplete={setScan} onBuyDirect={() => setDirectBuy(true)} reviews={reviews} caseStudies={caseStudies} aggregate={aggregate} />;
+    return <ScanStep config={config} onComplete={setScan} onBuyDirect={() => setDirectBuy(true)} reviews={reviews} caseStudies={caseStudies} aggregate={aggregate} />;
   }
   if (!leadDone) {
-    return <LeadStep aiSessionId={scan.aiSessionId} onComplete={() => setLeadDone(true)} />;
+    return <LeadStep concern={config.concern} aiSessionId={scan.aiSessionId} onComplete={() => setLeadDone(true)} />;
   }
   return (
     <OfferStep
+      config={config}
       hero={<Collage beforeUrl={scan.beforeUrl} afterUrl={scan.afterUrl} source={scan.source} />}
       page="scan-funnel"
       usedAiPreview={Boolean(scan.afterUrl)}

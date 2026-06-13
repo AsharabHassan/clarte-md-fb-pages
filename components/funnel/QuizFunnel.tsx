@@ -15,6 +15,7 @@ import {
   type QuizAnswers,
 } from '@/lib/funnel/quiz';
 import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
+import { getConcernConfig } from '@/lib/funnel/concern-config';
 import { pushFunnelEvent, type FunnelEvent } from '@/lib/funnel/analytics';
 import { DOCTOR_LINE } from '@/lib/funnel/evidence';
 import { StarRating } from './StarRating';
@@ -172,6 +173,7 @@ function QuizOffer({
   }, []);
   return (
     <OfferStep
+      config={getConcernConfig('acne')}
       hero={
         <MatchedResult
           pair={pair}

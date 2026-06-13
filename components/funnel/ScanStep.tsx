@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import NextImage from 'next/image';
-import { PROTOCOL_HERO } from '@/lib/funnel/product-images';
-import { ACNE_GLOW, FUNNEL_AI_PROMPT } from '@/lib/funnel/offer';
+import type { ConcernConfig } from '@/lib/funnel/concern-config';
 import { pushFunnelEvent } from '@/lib/funnel/analytics';
 import type { ZoneSource } from '@/lib/funnel/collage';
 import { StarRating } from './StarRating';
@@ -54,12 +53,14 @@ const STAGES = [
 ];
 
 export function ScanStep({
+  config,
   onComplete,
   onBuyDirect,
   reviews,
   caseStudies,
   aggregate,
 }: {
+  config: ConcernConfig;
   onComplete: (r: ScanResult) => void;
   onBuyDirect: () => void;
   reviews: ReviewCard[];
@@ -112,7 +113,7 @@ export function ScanStep({
         body: JSON.stringify({
           image_base64: base64,
           mime_type: 'image/jpeg',
-          concern: 'acne',
+          concern: config.concern,
           consent: true,
         }),
       }).then((r) => r.json()).catch(() => null);
@@ -123,9 +124,9 @@ export function ScanStep({
         body: JSON.stringify({
           image_base64: base64,
           mime_type: 'image/jpeg',
-          concern: 'acne',
-          prompt: FUNNEL_AI_PROMPT,
-          bundle_slug: ACNE_GLOW.slug,
+          concern: config.concern,
+          prompt: config.aiPrompt,
+          bundle_slug: config.baBundleSlug,
           quality: 'low', // funnel trades fidelity for speed
         }),
       }).then((r) => r.json()).catch(() => null);
@@ -158,11 +159,8 @@ export function ScanStep({
 
   return (
     <section className="funnel-scan">
-      <h1 className="funnel-h1">See your skin in 12 weeks.</h1>
-      <p className="funnel-sub">
-        Take a clear close-up of the area that bothers you most. Our dermatologist-trained
-        AI maps your acne and projects your skin after the 12-week protocol — free, in seconds.
-      </p>
+      <h1 className="funnel-h1">{config.copy.scanHeadline}</h1>
+      <p className="funnel-sub">{config.copy.scanSub}</p>
 
       <div className="funnel-trustline">
         <StarRating avg={aggregate.avg} count={aggregate.count} />
@@ -172,7 +170,7 @@ export function ScanStep({
       <ol className="funnel-steps" aria-label="How it works">
         <li className="funnel-step">
           <span className="funnel-step__num">1</span>
-          <span className="funnel-step__label">Take a photo of the area that bothers you</span>
+          <span className="funnel-step__label">{config.copy.step1Label}</span>
         </li>
         <li className="funnel-step">
           <span className="funnel-step__num">2</span>
@@ -186,8 +184,8 @@ export function ScanStep({
 
       <div className="funnel-hero-img funnel-hero-img--scan">
         <NextImage
-          src={PROTOCOL_HERO}
-          alt="The Acne Glow Protocol"
+          src={config.protocolHero}
+          alt={config.protocolHeroAlt}
           fill
           sizes="(max-width: 560px) 100vw, 560px"
           style={{ objectFit: 'cover' }}
@@ -202,7 +200,7 @@ export function ScanStep({
 
       {err && <p className="funnel-error">{err}</p>}
 
-      <LandingOffer onBuyNow={onBuyDirect} />
+      <LandingOffer config={config} onBuyNow={onBuyDirect} />
 
       <CaseStudies cases={caseStudies} heading="Real 12-week before & afters" />
       <p className="funnel-disclaimer">{RESULTS_DISCLAIMER}</p>
