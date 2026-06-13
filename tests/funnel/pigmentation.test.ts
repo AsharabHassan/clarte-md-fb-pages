@@ -34,3 +34,31 @@ describe('bundleBySlug cross-concern lookup', () => {
     expect(bundleBySlug('nope')).toBeUndefined();
   });
 });
+
+import { getConcernConfig } from '@/lib/funnel/concern-config';
+
+describe('getConcernConfig', () => {
+  it('defaults to acne', () => {
+    const c = getConcernConfig();
+    expect(c.concern).toBe('acne');
+    expect(c.leadSlug).toBe('acne-solo-protocol');
+    expect(c.bundleSkus).toEqual(['rescue', 'acne', 'vitc', 'reti']);
+    expect(c.addonSkus).toEqual(['spf', 'ha', 'prep']);
+    expect(c.bundles.length).toBe(3);
+  });
+
+  it('returns the pigmentation config', () => {
+    const c = getConcernConfig('pigmentation');
+    expect(c.concern).toBe('pigmentation');
+    expect(c.leadSlug).toBe('even-tone-protocol');
+    expect(c.bundleSkus).toEqual(['prep', 'vitc', 'light', 'spf']);
+    expect(c.addonSkus).toEqual(['rescue', 'acne', 'ha', 'reti']);
+    expect(c.bundles.length).toBe(1);
+    expect(c.aiPrompt).toContain('tranexamic');
+    expect(c.protocolHeroAlt).toBe('The Even Tone Protocol');
+  });
+
+  it('falls back to acne for unknown concerns', () => {
+    expect(getConcernConfig('xyz').concern).toBe('acne');
+  });
+});
