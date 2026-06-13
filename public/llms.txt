@@ -1,0 +1,12 @@
+# Clarté MD
+> Dermatologist-grade acne treatment in Pakistan. Free AI acne scan that maps your breakouts and projects your skin 12 weeks ahead, plus cash-on-delivery protocols.
+
+## Main pages
+- [AI Acne Scan (home)](/): Snap a close-up of your acne, get an AI skin analysis and a 12-week projection, then order the matching protocol.
+- [Acne Skin Quiz](/quiz): Answer 4 quick questions (no photo) to get a personalised acne protocol match.
+
+## Key facts
+- The entry option is the Clarifying Acne Serum at PKR 1,999; the 2-step Acne Essentials Duo is PKR 3,499; the full Acne Glow Protocol is PKR 6,499. All cash on delivery across Pakistan, flat PKR 250 delivery.
+- Actives are evidence-backed: niacinamide (60% reduction in inflammatory lesions at 8 weeks, Khodaeiani 2013), azelaic acid (70% mean reduction in comedones at 12 weeks, Webster 2000), salicylic acid 2% (47% fewer comedones at 12 weeks, Zander & Weisman 1992).
+- Formulated by dermatologists in London & Lahore.
+- The 12-week AI preview is an illustrative projection, not a guarantee; individual results vary.

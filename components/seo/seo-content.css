@@ -1,0 +1,38 @@
+/* components/seo/seo-content.css */
+.seo-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+  color: #1f2430;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.seo-content h2 {
+  font-family: var(--font-fraunces, Georgia, serif);
+  font-size: 1.4rem;
+  line-height: 1.25;
+  margin: 2rem 0 0.6rem;
+}
+.seo-content p { margin: 0 0 0.9rem; }
+.seo-disclaimer {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-style: italic;
+}
+.seo-evidence {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0 1rem;
+  font-size: 0.92rem;
+}
+.seo-evidence th,
+.seo-evidence td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid #e7e9ee;
+  vertical-align: top;
+}
+.seo-evidence th { font-weight: 600; }
+.seo-faq dt { font-weight: 600; margin-top: 1rem; }
+.seo-faq dd { margin: 0.3rem 0 0; }
+.seo-cite { color: #6b7280; font-size: 0.85rem; }
