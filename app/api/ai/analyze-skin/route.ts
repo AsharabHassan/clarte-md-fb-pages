@@ -5,6 +5,7 @@ import { db, schema } from '@/lib/db/client';
 import { AnalyzeSkinSchema } from '@/lib/validators/analyze-skin';
 import { extractClientIp, hashIp, RATE_LIMIT_AI_PER_HOUR } from '@/lib/ai/rate-limit';
 import { analyzeSkin } from '@/lib/ai/analyze-skin';
+import { PIGMENTATION_ANALYSIS_PROMPT } from '@/lib/ai/pigmentation-prompts';
 import { createSupabaseAdminClient } from '@/lib/supabase/server';
 
 export const maxDuration = 60;
@@ -45,7 +46,11 @@ export async function POST(req: NextRequest) {
 
   let result;
   try {
-    result = await analyzeSkin({ inputBase64: input.image_base64, inputMimeType: input.mime_type });
+    result = await analyzeSkin({
+      inputBase64: input.image_base64,
+      inputMimeType: input.mime_type,
+      prompt: input.concern === 'pigmentation' ? PIGMENTATION_ANALYSIS_PROMPT : undefined,
+    });
   } catch (err: unknown) {
     console.error('Gemini analyze-skin failed', err);
     const errMsg = err instanceof Error ? err.message : String(err);

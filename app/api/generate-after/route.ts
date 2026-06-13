@@ -7,6 +7,7 @@ import { extractClientIp, hashIp, RATE_LIMIT_AI_PER_HOUR } from '@/lib/ai/rate-l
 import { generateSkinMap, type SkinMap } from '@/lib/ai/skin-map';
 import { generateAfterOpenAI } from '@/lib/ai/openai-generate-after';
 import { ACNE_BA_PROMPT } from '@/lib/ai/prompts';
+import { PIGMENTATION_BA_PROMPT } from '@/lib/ai/pigmentation-prompts';
 import { createSupabaseAdminClient } from '@/lib/supabase/server';
 
 // gpt-image-2 at quality:medium typically completes in 30-90s; bump
@@ -90,7 +91,9 @@ export async function POST(req: NextRequest) {
     result = await generateAfterOpenAI({
       inputBase64: input.image_base64,
       inputMimeType: input.mime_type,
-      prompt: input.prompt || ACNE_BA_PROMPT,
+      prompt:
+        input.prompt ||
+        (input.concern === 'pigmentation' ? PIGMENTATION_BA_PROMPT : ACNE_BA_PROMPT),
       bundleSlug: input.bundle_slug,
       map,
       quality: input.quality,
