@@ -37,6 +37,8 @@ export interface AnalyzeResult {
 export async function analyzeSkin(args: {
   inputBase64: string;
   inputMimeType: string;
+  /** Override the analysis prompt (e.g. pigmentation). Defaults to acne. */
+  prompt?: string;
 }): Promise<AnalyzeResult> {
   const startedAt = Date.now();
 
@@ -44,7 +46,7 @@ export async function analyzeSkin(args: {
     model: MODEL_ANALYSIS,
     contents: [
       { inlineData: { data: args.inputBase64, mimeType: args.inputMimeType } },
-      { text: ANALYSIS_PROMPT },
+      { text: args.prompt ?? ANALYSIS_PROMPT },
     ],
     config: {
       responseMimeType: 'application/json',

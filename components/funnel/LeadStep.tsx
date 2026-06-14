@@ -17,6 +17,7 @@ import { trackMetaLead } from '@/lib/funnel/meta';
  */
 export function LeadStep({
   onComplete,
+  concern = 'acne',
   aiSessionId,
   extra,
   eyebrow = 'Analysis complete',
@@ -25,6 +26,7 @@ export function LeadStep({
   cta = 'Reveal my results →',
 }: {
   onComplete: (lead: LeadContact) => void;
+  concern?: string;
   aiSessionId?: string;
   /** Extra fields merged into the /api/lead body (e.g. quiz answers). */
   extra?: Record<string, unknown>;
@@ -60,7 +62,7 @@ export function LeadStep({
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           ...lead,
-          concern: 'acne',
+          concern,
           meta_event_id: metaEventId,
           ...(aiSessionId ? { ai_session_id: aiSessionId } : {}),
           ...(extra ?? {}),

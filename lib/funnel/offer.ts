@@ -5,6 +5,7 @@
  * are for rendering the offer block only.
  */
 import { PRODUCT_META } from '@/lib/products/catalog';
+import { PIGMENTATION_BUNDLES } from './pigmentation-offer';
 
 export const SHIPPING_PKR = 250; // mirrors FLAT_SHIPPING_PKR
 
@@ -80,7 +81,13 @@ export const FUNNEL_BUNDLES: FunnelBundle[] = [
 ];
 
 export function bundleBySlug(slug: string): FunnelBundle | undefined {
-  return FUNNEL_BUNDLES.find((b) => b.slug === slug);
+  // Search acne bundles first, then pigmentation. pigmentation-offer.ts imports
+  // only the FunnelBundle *type* from this file (erased at compile time), so
+  // there is no runtime import cycle.
+  return (
+    FUNNEL_BUNDLES.find((b) => b.slug === slug) ??
+    PIGMENTATION_BUNDLES.find((b) => b.slug === slug)
+  );
 }
 
 export interface BundleSavings {

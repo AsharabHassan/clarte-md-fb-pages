@@ -5,16 +5,15 @@ import Image from 'next/image';
 import { Banknote, Loader2, Check } from 'lucide-react';
 import { useCart } from '@/lib/cart/use-cart';
 import {
-  LEAD_BUNDLE_SLUG,
   SHIPPING_PKR,
   FUNNEL_TIMER_KEY,
-  FUNNEL_BUNDLES,
   bundleBySlug,
   bundleSavings,
 } from '@/lib/funnel/offer';
+import type { ConcernConfig } from '@/lib/funnel/concern-config';
 import { pushFunnelEvent } from '@/lib/funnel/analytics';
 import { PRODUCT_META } from '@/lib/products/catalog';
-import { BUNDLE_SKUS, ADDON_SKUS, computeCartTotals } from '@/lib/funnel/shop';
+import { computeCartTotals } from '@/lib/funnel/shop';
 import { trackMetaPurchase } from '@/lib/funnel/meta';
 import { loadLead } from '@/lib/funnel/lead-storage';
 import { ProductCard } from './ProductCard';
@@ -33,6 +32,7 @@ import type { ReviewCard, CaseStudy } from '@/lib/reviews/types';
 const PK_CITIES = ['Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Faisalabad', 'Multan', 'Peshawar', 'Sialkot', 'Gujranwala', 'Hyderabad', 'Quetta', 'Other'];
 
 export function OfferStep({
+  config,
   hero,
   page,
   usedAiPreview,
@@ -41,6 +41,7 @@ export function OfferStep({
   caseStudies,
   aggregate,
 }: {
+  config: ConcernConfig;
   /** The before/after visual at the top of the offer (Collage or MatchedResult). */
   hero: React.ReactNode;
   /** sourcePage recorded on the order ('scan-funnel' | 'quiz-funnel'). */
@@ -85,7 +86,7 @@ export function OfferStep({
 
   useEffect(() => {
     clearCart();
-    addBundle(LEAD_BUNDLE_SLUG); // default to the lowest-priced serum (price-sensitive lead)
+    addBundle(config.leadSlug); // default to the lowest-priced serum (price-sensitive lead)
     pushFunnelEvent('offer_viewed');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -126,7 +127,7 @@ export function OfferStep({
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          concern: 'acne',
+          concern: config.concern,
           page,
           contact: { name: fd.get('name'), phone, email: fd.get('email') },
           shipping: {
@@ -196,7 +197,7 @@ export function OfferStep({
       </div>
 
       <div className="funnel-bundles">
-        {FUNNEL_BUNDLES.map((b) => {
+        {config.bundles.map((b) => {
           const selected = currentBundleSlug === b.slug;
           const sv = bundleSavings(b);
           return (
@@ -246,11 +247,11 @@ export function OfferStep({
         <div className="funnel-products">
           <p className="funnel-products-label">Add individual products</p>
           <div className="funnel-products-grid">
-            {BUNDLE_SKUS.map((sku) => <ProductCard key={sku} sku={sku} />)}
+            {config.bundleSkus.map((sku) => <ProductCard key={sku} sku={sku} />)}
           </div>
           <p className="funnel-products-label">Popular add-ons</p>
           <div className="funnel-products-grid">
-            {ADDON_SKUS.map((sku) => <ProductCard key={sku} sku={sku} />)}
+            {config.addonSkus.map((sku) => <ProductCard key={sku} sku={sku} />)}
           </div>
         </div>
 

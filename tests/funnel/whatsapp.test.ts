@@ -13,7 +13,7 @@ const acneGlowCart: Cart = {
 
 describe('whatsapp order link', () => {
   it('exposes the brand WhatsApp number', () => {
-    expect(WHATSAPP_NUMBER).toBe('923249986822');
+    expect(WHATSAPP_NUMBER).toBe('923286772596');
   });
 
   it('writes a message naming the protocol and its total (incl. shipping)', () => {
@@ -32,7 +32,7 @@ describe('whatsapp order link', () => {
 
   it('builds a wa.me link with the URL-encoded message', () => {
     const link = buildWhatsAppOrderLink(acneGlowCart);
-    expect(link.startsWith('https://wa.me/923249986822?text=')).toBe(true);
+    expect(link.startsWith('https://wa.me/923286772596?text=')).toBe(true);
     const text = decodeURIComponent(link.split('text=')[1]);
     expect(text).toBe(buildWhatsAppOrderMessage(acneGlowCart));
   });

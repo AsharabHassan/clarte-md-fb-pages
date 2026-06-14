@@ -2,7 +2,8 @@
 
 import NextImage from 'next/image';
 import { Banknote } from 'lucide-react';
-import { bundleBySlug, bundleSavings, SHIPPING_PKR, FUNNEL_TIMER_KEY, LEAD_BUNDLE_SLUG } from '@/lib/funnel/offer';
+import { bundleBySlug, bundleSavings, SHIPPING_PKR, FUNNEL_TIMER_KEY } from '@/lib/funnel/offer';
+import type { ConcernConfig } from '@/lib/funnel/concern-config';
 import { PRODUCT_META } from '@/lib/products/catalog';
 import { pushFunnelEvent } from '@/lib/funnel/analytics';
 import { CountdownTimer } from '@/components/marketing/CountdownTimer';
@@ -16,8 +17,8 @@ import { TrustStrip } from '@/components/marketing/TrustStrip';
  * low stock + live order ticker) and trust chips. The Buy now button jumps
  * straight to the offer/checkout (ScanFunnel's direct-buy path).
  */
-export function LandingOffer({ onBuyNow }: { onBuyNow: () => void }) {
-  const bundle = bundleBySlug(LEAD_BUNDLE_SLUG)!; // lead offer = cheapest acne serum
+export function LandingOffer({ config, onBuyNow }: { config: ConcernConfig; onBuyNow: () => void }) {
+  const bundle = bundleBySlug(config.leadSlug)!; // lead offer = the headline option for this concern
   const sv = bundleSavings(bundle);
 
   return (

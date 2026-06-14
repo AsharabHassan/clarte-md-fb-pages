@@ -38,5 +38,29 @@ export const ACNE_STATS: FunnelStat[] = [
   },
 ];
 
+export const PIGMENTATION_STATS: FunnelStat[] = [
+  {
+    active: 'Vitamin C 15%',
+    figure: 73,
+    suffix: '%',
+    context: 'reduction in pigmentation intensity at 16 weeks',
+    citation: 'Espinal-Perez et al., Int J Dermatol 2004',
+  },
+  {
+    active: 'Tranexamic Acid',
+    figure: 60,
+    suffix: '%',
+    context: 'mean melasma area & severity reduction at 12 weeks',
+    citation: 'Lee et al., J Am Acad Dermatol 2016',
+  },
+  {
+    active: 'Kojic Acid',
+    figure: 51,
+    suffix: '%',
+    context: 'improvement in melasma vs vehicle at 12 weeks',
+    citation: 'Lim, Dermatol Surg 1999',
+  },
+];
+
 /** Credibility line — matches the main site's wording; no invented names. */
 export const DOCTOR_LINE = 'Formulated by dermatologists in London & Lahore';
