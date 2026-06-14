@@ -43,14 +43,15 @@ export const metadata: Metadata = {
     'product:reti:retailer_item_id':   'reti',
     'product:light:retailer_item_id':  'light',
     'product:spf:retailer_item_id':    'spf',
-    // ── Protocols / bundles (all 7 DB slugs) ────────────────────────────
-    'product:acne-solo-protocol:retailer_item_id':       'acne-solo-protocol',
-    'product:acne-essentials-protocol:retailer_item_id': 'acne-essentials-protocol',
-    'product:acne-glow-protocol:retailer_item_id':       'acne-glow-protocol',
-    'product:clear-skin-protocol:retailer_item_id':      'clear-skin-protocol',
-    'product:barrier-protocol:retailer_item_id':         'barrier-protocol',
-    'product:even-tone-protocol:retailer_item_id':       'even-tone-protocol',
-    'product:renewal-protocol:retailer_item_id':         'renewal-protocol',
+    // ── Protocols / bundles (all 8 DB slugs) ────────────────────────────
+    'product:acne-solo-protocol:retailer_item_id':           'acne-solo-protocol',
+    'product:acne-essentials-protocol:retailer_item_id':     'acne-essentials-protocol',
+    'product:acne-glow-protocol:retailer_item_id':           'acne-glow-protocol',
+    'product:clear-skin-protocol:retailer_item_id':          'clear-skin-protocol',
+    'product:barrier-protocol:retailer_item_id':             'barrier-protocol',
+    'product:even-tone-protocol:retailer_item_id':           'even-tone-protocol',
+    'product:even-tone-essentials-protocol:retailer_item_id': 'even-tone-essentials-protocol',
+    'product:renewal-protocol:retailer_item_id':             'renewal-protocol',
     // Primary featured product (lead offer) for Meta catalog matching
     'product:retailer_item_id': 'acne-solo-protocol',
     'product:availability':     'in stock',

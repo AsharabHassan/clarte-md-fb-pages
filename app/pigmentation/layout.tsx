@@ -27,9 +27,12 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   other: {
-    'product:retailer_item_id': 'even-tone-protocol',
+    'product:even-tone-essentials-protocol:retailer_item_id': 'even-tone-essentials-protocol',
+    'product:even-tone-protocol:retailer_item_id': 'even-tone-protocol',
+    // Primary = the default/lead offer (entry tier)
+    'product:retailer_item_id': 'even-tone-essentials-protocol',
     'product:availability': 'in stock',
-    'product:price:amount': '6999',
+    'product:price:amount': '1799',
     'product:price:currency': 'PKR',
   },
 };

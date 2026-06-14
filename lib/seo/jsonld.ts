@@ -169,9 +169,9 @@ export function catalogProductsLd(): object[] {
   }));
 }
 
-// All 7 protocols/bundles — 3 acne funnel bundles + 4 additional from the DB.
-// Prices and slugs mirror lib/db/seed.ts. Images for the 4 non-funnel protocols
-// are served from the main site (clartemd.com.pk) as no local assets exist here.
+// All 8 protocols/bundles — 3 acne funnel bundles + 5 additional from the DB.
+// Prices and slugs mirror lib/db/seed.ts. Non-funnel protocols without a local
+// asset are served from the main site (clartemd.com.pk).
 const MAIN_SITE = 'https://clartemd.com.pk';
 
 const EXTRA_PROTOCOLS = [
@@ -193,8 +193,15 @@ const EXTRA_PROTOCOLS = [
     slug: 'even-tone-protocol',
     name: 'The Even Tone Protocol',
     description: 'Targets stubborn pigmentation and dark spots with tranexamic acid 3%, kojic, and arbutin — plus vitamin C and SPF.',
-    image: `${MAIN_SITE}/protocols/even-tone-protocol/hero.webp`,
+    image: `${SITE_URL}/protocols/even-tone-protocol/hero.webp`,
     offerPkr: 6999,
+  },
+  {
+    slug: 'even-tone-essentials-protocol',
+    name: 'Radiance Prep Essential',
+    description: 'Entry pigmentation tier — the Radiance Prep Cleanser with glutathione, sodium lactate and citric acid to gently brighten and even tone daily.',
+    image: `${SITE_URL}/protocols/even-tone-essentials-protocol/hero.webp`,
+    offerPkr: 1799,
   },
   {
     slug: 'renewal-protocol',
