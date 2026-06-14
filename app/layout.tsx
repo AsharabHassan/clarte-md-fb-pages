@@ -61,7 +61,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+// GTM container ID. Public (ships in client HTML), so safe to hardcode as the
+// default — same as FB_PIXEL_ID. Env var still overrides per-environment.
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID ?? 'GTM-P8VD7TBS';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
