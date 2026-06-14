@@ -8,6 +8,7 @@
 import type { FunnelBundle } from './offer';
 import { FUNNEL_BUNDLES, LEAD_BUNDLE_SLUG, FUNNEL_AI_PROMPT, ACNE_GLOW } from './offer';
 import { PIGMENTATION_BUNDLES, PIGMENTATION_LEAD_SLUG, PIGMENTATION_AI_PROMPT } from './pigmentation-offer';
+import { BUNDLE_SKUS, ADDON_SKUS } from './shop';
 
 export interface ConcernConfig {
   /** Value written to the `concern` field on all API calls. */
@@ -42,8 +43,8 @@ const ACNE_CONFIG: ConcernConfig = {
   concern: 'acne',
   bundles: FUNNEL_BUNDLES,
   leadSlug: LEAD_BUNDLE_SLUG,
-  bundleSkus: ['rescue', 'acne', 'vitc', 'reti'],
-  addonSkus: ['spf', 'ha', 'prep'],
+  bundleSkus: BUNDLE_SKUS,
+  addonSkus: ADDON_SKUS,
   aiPrompt: FUNNEL_AI_PROMPT,
   baBundleSlug: ACNE_GLOW.slug,
   protocolHero: '/protocols/acne-glow-protocol/hero.webp',

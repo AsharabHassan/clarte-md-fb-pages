@@ -18,7 +18,7 @@ import { TrustStrip } from '@/components/marketing/TrustStrip';
  * straight to the offer/checkout (ScanFunnel's direct-buy path).
  */
 export function LandingOffer({ config, onBuyNow }: { config: ConcernConfig; onBuyNow: () => void }) {
-  const bundle = bundleBySlug(config.leadSlug)!; // lead offer = cheapest acne serum
+  const bundle = bundleBySlug(config.leadSlug)!; // lead offer = the headline option for this concern
   const sv = bundleSavings(bundle);
 
   return (

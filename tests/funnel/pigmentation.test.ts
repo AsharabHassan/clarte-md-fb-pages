@@ -2,6 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { PIGMENTATION_BUNDLES, PIGMENTATION_LEAD_SLUG } from '@/lib/funnel/pigmentation-offer';
 import { bundleSavings, bundleBySlug } from '@/lib/funnel/offer';
+import { getConcernConfig } from '@/lib/funnel/concern-config';
 
 describe('pigmentation offer', () => {
   it('has a single even-tone-protocol bundle as the lead', () => {
@@ -34,8 +35,6 @@ describe('bundleBySlug cross-concern lookup', () => {
     expect(bundleBySlug('nope')).toBeUndefined();
   });
 });
-
-import { getConcernConfig } from '@/lib/funnel/concern-config';
 
 describe('getConcernConfig', () => {
   it('defaults to acne', () => {
