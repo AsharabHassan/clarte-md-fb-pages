@@ -21,8 +21,8 @@ export const PIGMENTATION_BUNDLES: FunnelBundle[] = [
       'Targets dark spots, uneven skin tone and post-acne marks — a PHA prep ' +
       'cleanser, vitamin C 15% antioxidant serum, a tranexamic 3% + kojic + ' +
       'arbutin lightening cream, and SPF 50+ to lock in results. Dermatologist-dosed.',
-    hero: 'https://clartemd.com.pk/protocols/even-tone-protocol/hero.webp',
-    heroFit: 'cover',
+    hero: '/protocols/even-tone-protocol/hero.webp',
+    heroFit: 'contain',
   },
 ];
 

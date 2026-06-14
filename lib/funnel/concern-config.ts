@@ -69,7 +69,7 @@ const PIGMENTATION_CONFIG: ConcernConfig = {
   addonSkus: ['rescue', 'acne', 'ha', 'reti'],
   aiPrompt: PIGMENTATION_AI_PROMPT,
   baBundleSlug: 'even-tone-protocol',
-  protocolHero: 'https://clartemd.com.pk/protocols/even-tone-protocol/hero.webp',
+  protocolHero: '/protocols/even-tone-protocol/hero.webp',
   protocolHeroAlt: 'The Even Tone Protocol',
   copy: {
     scanHeadline: 'See your skin in 12 weeks.',

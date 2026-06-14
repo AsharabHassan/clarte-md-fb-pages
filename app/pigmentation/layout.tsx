@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: 'AI Dark Spot Scan & 12-Week Pigmentation Treatment in Pakistan | Clarté MD',
     description:
       'Free AI skin scan — see your dark spots projected 12 weeks ahead and get a dermatologist-grade pigmentation protocol. Cash on delivery across Pakistan.',
-    images: ['https://clartemd.com.pk/protocols/even-tone-protocol/hero.webp'],
+    images: ['/protocols/even-tone-protocol/hero.webp'],
   },
   robots: { index: true, follow: true },
   other: {

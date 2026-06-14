@@ -11,6 +11,7 @@ export const PRODUCT_IMAGE: Record<string, string> = {
   spf: 'https://cdn.shopify.com/s/files/1/0782/5113/1112/files/91edf02b-ef9c-4062-a6b9-f0975d941393.png?v=1773337514',
   ha: 'https://clartemd.com.pk/products/ha/hero.webp',
   prep: 'https://cdn.shopify.com/s/files/1/0782/5113/1112/files/Prep.png?v=1773743330',
+  light: '/products/light/hero.webp',
 };
 
 /** Local protocol hero image (copied into public/). */
